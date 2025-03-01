@@ -1,5 +1,5 @@
 {
-  "name": "viber3d",
+  "name": "@viber3d/viber3d-starter",
   "version": "0.0.1",
   "description": "A modern Game Starter Kit for 3D games with react three fiber",
   "type": "module",
@@ -10,7 +10,22 @@
     "clean": "npx rimraf node_modules && npm install",
     "preview": "vite preview"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instructa/viber3d"
+  },
+  "keywords": [
+    "viber3d",
+    "cli",
+    "three",
+    "threejs",
+    "project-setup",
+    "cursor",
+    "cursor-ai",
+    "react-three-fiber",
+    "ai-coding",
+    "instructa"
+  ],
   "author": "Kevin Kern",
   "license": "MIT",
   "dependencies": {

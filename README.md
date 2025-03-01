@@ -34,7 +34,7 @@
 
 1. Create a new **viber3d** project:
 ```bash
-npx create-viber3d@latest
+npx viber3d@latest init
 ```
 
 2. Open in Cursor
@@ -81,7 +81,7 @@ These rules help maintain code quality and consistency when using AI assistance,
 ## CLI Options
 
 ```bash
-npx create-viber3d@latest [project-name] [options]
+npx viber3d@latest [project-name] [options]
 
 Options:
   --cwd, -c             The working directory. Defaults to the current directory

@@ -9,11 +9,11 @@ import { resolve, relative } from 'pathe'
 import fs from 'fs-extra'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'pathe'
+import { downloadTemplate } from 'giget'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const templateDir = resolve(__dirname, '../template')
-const viber3dDir = resolve(__dirname, '../../viber3d')
 
 const renameFiles: Record<string, string | undefined> = {
   _gitignore: '.gitignore',
@@ -27,9 +27,9 @@ const renameFiles: Record<string, string | undefined> = {
 const packageManagerOptions = ['npm', 'yarn', 'pnpm'] as const
 type PackageManagerName = typeof packageManagerOptions[number]
 
-const main = defineCommand({
+const initCommand = defineCommand({
   meta: {
-    name: 'create-viber3d',
+    name: 'init',
     description: 'Initialize a fresh Viber3D project',
   },
   args: {
@@ -163,61 +163,18 @@ const main = defineCommand({
         shouldForce = true
       }
 
-      // Create project directory if it doesn't exist
-      if (!existsSync(root)) {
-        fs.mkdirSync(root, { recursive: true })
-      } else if (shouldForce) {
-        // Clear directory if force option is enabled
-        fs.emptyDirSync(root)
+      // Download template using giget
+      consola.info('Downloading Viber3D template...')
+      try {
+        await downloadTemplate('gh:instructa/viber3d/packages/viber3d-starter', {
+          dir: root,
+          force: shouldForce
+        })
+        consola.success('Template downloaded successfully!')
+      } catch (error) {
+        consola.error('Failed to download template:', error)
+        process.exit(1)
       }
-
-      // Copy viber3d template files
-      consola.info('Copying Viber3D template files...')
-      
-      // Copy the viber3d package files to the new project
-      await fs.copy(viber3dDir, root, {
-        filter: (src) => {
-          // Skip node_modules, .git, and other unnecessary directories
-          const excludeDirs = [
-            'node_modules',
-            '.git',
-            'dist',
-            'build',
-            '.cursor',
-            'docs',
-            'codefetch'
-          ]
-          
-          for (const dir of excludeDirs) {
-            if (src.includes(`/${dir}/`) || src.endsWith(`/${dir}`)) {
-              return false
-            }
-          }
-          
-          // Skip package manager lock files
-          const excludeFiles = [
-            'package-lock.json',
-            'yarn.lock',
-            'pnpm-lock.yaml',
-            '.npmrc',
-            '.yarnrc',
-            '.pnpmrc'
-          ]
-          
-          for (const file of excludeFiles) {
-            if (src.endsWith(`/${file}`)) {
-              return false
-            }
-          }
-          
-          // Skip README.md as we'll create a custom one
-          if (src.endsWith('/README.md')) {
-            return false
-          }
-          
-          return true
-        }
-      })
 
       // Get project details
       let description = `A Viber3D game called ${projectName}`
@@ -365,6 +322,10 @@ function processTemplateFiles(
   targetDir: string,
   variables: Record<string, any>
 ) {
+  if (!existsSync(templateDir)) {
+    return // Skip if template directory doesn't exist
+  }
+  
   const files = fs.readdirSync(templateDir, { withFileTypes: true })
   
   for (const file of files) {
@@ -408,5 +369,16 @@ function updatePackageJson(
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   }
 }
+
+// Main command with subcommands
+const main = defineCommand({
+  meta: {
+    name: 'viber3d',
+    description: 'Viber3D CLI tools',
+  },
+  subCommands: {
+    init: initCommand,
+  }
+})
 
 runMain(main)

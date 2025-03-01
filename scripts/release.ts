@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-const packages = ['viber3d', 'create-viber3d'];
+const packages = ['create-viber3d'];
 
 function run(command: string, cwd: string) {
   console.log(`Executing: ${command} in ${cwd}`);

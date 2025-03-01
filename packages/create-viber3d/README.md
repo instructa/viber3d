@@ -1,4 +1,4 @@
-# create-viber3d
+# viber3d
 
 <p>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat&colorA=18181B&colorB=28CF8D" alt="License">
@@ -10,10 +10,10 @@ CLI tool to create a new **viber3D** project - a modern starter kit for 3D brows
 
 ```bash
 # Create a new viber3d project
-npx create-viber3d@latest
+npx viber3d@latest init
 
 # Or specify a project name
-npx create-viber3d@latest my-3d-game
+npx viber3d@latest init myGame
 ```
 
 ## Features
@@ -30,7 +30,7 @@ npx create-viber3d@latest my-3d-game
 ## CLI Options
 
 ```bash
-npx create-viber3d@latest [project-name] [options]
+npx viber3d@latest init [project-name] [options]
 
 Options:
   --cwd, -c             Working directory (default: current)

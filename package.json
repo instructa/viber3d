@@ -16,9 +16,9 @@
   "scripts": {
     "lint": "eslint --cache .",
     "typecheck": "tsc -p scripts --noEmit && pnpm -r --parallel run typecheck",
-    "build": "pnpm -r --filter='./packages/*' run build",
-    "publish": "pnpm -r --filter='./packages/*' run build && npx release-it --git.pushRepo=https://github.com/viber3d/viber3d.git && tsx scripts/release.ts",
-    "release": "pnpm run build && npx release-it --git.pushRepo=https://github.com/viber3d/viber3d.git",
+    "build": "pnpm -r --filter='./packages/create-viber3d' run build",
+    "publish": "pnpm -r --filter='./packages/create-viber3d' run build && npx release-it --git.pushRepo=https://github.com/instructa/viber3d.git && tsx scripts/release.ts",
+    "release": "npx release-it --git.pushRepo=https://github.com/instructa/viber3d.git",
     "publish-npm": "tsx scripts/release.ts",
     "link-create": "cd packages/create-viber3d && pnpm link --global",
     "test-create": "pnpm -F create-viber3d run create --debug --cwd ./test-output"
@@ -31,7 +31,9 @@
     "project-setup",
     "cursor",
     "cursor-ai",
-    "react-three-fiber"
+    "react-three-fiber",
+    "ai-coding",
+    "instructa"
   ],
   "devDependencies": {
     "@release-it/bumper": "^6.0.1",
