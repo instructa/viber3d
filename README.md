@@ -59,7 +59,7 @@ npm run build
 
 ## AI Code Editor Integration
 
-* Supports Cursor AI
+### Cursor AI
 
 viber3d comes with predefined `.cursor/rules` to enhance your development experience when using Cursor AI:
 
@@ -141,4 +141,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 * [codefetch](https://github.com/regenrek/codefetch) - Turn code into Markdown for LLMs with one simple terminal command
 * [aidex](https://github.com/regenrek/aidex) A CLI tool that provides detailed information about AI language models, helping developers choose the right model for their needs.
 * [codetie](https://github.com/codetie-ai/codetie) - XCode CLI
-# viber3d
