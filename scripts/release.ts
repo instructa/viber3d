@@ -1,8 +1,12 @@
-import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 
+// List of packages to publish
 const packages = ['create-viber3d'];
+
+// List of all packages that need version bumping (including those not published)
+const allPackages = ['create-viber3d', 'viber3d-starter'];
 
 function run(command: string, cwd: string) {
   console.log(`Executing: ${command} in ${cwd}`);
@@ -42,16 +46,71 @@ function bumpVersion(pkgPath: string, type: 'major' | 'minor' | 'patch' | string
   pkgJson.version = newVersion;
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + '\n');
   
-  console.log(`Bumped version from ${currentVersion} to ${newVersion}`);
+  console.log(`Bumped version from ${currentVersion} to ${newVersion} in ${pkgJsonPath}`);
   return newVersion;
 }
 
+/**
+ * Bump version in all package.json files
+ * @param versionBump Version bump type or specific version
+ * @returns The new version
+ */
+function bumpAllVersions(versionBump: 'major' | 'minor' | 'patch' | string = 'patch'): string {
+  // First bump the root package.json
+  const rootPath = path.resolve('.');
+  const newVersion = bumpVersion(rootPath, versionBump);
+  
+  // Then bump all package.json files in the packages directory
+  for (const pkg of allPackages) {
+    const pkgPath = path.resolve(`packages/${pkg}`);
+    if (fs.existsSync(path.join(pkgPath, 'package.json'))) {
+      // Use the same version for all packages
+      bumpVersion(pkgPath, newVersion);
+    }
+  }
+  
+  return newVersion;
+}
+
+/**
+ * Create a git commit and tag for the release
+ * @param version The version to tag
+ */
+function createGitCommitAndTag(version: string) {
+  console.log('Creating git commit and tag...');
+  
+  try {
+    // Stage all changes
+    run('git add .', '.');
+    
+    // Create commit with version message
+    run(`git commit -m "chore: release v${version}"`, '.');
+    
+    // Create tag
+    run(`git tag -a v${version} -m "Release v${version}"`, '.');
+    
+    // Push commit and tag to remote
+    console.log('Pushing commit and tag to remote...');
+    run('git push', '.');
+    run('git push --tags', '.');
+    
+    console.log(`Successfully created and pushed git tag v${version}`);
+  } catch (error) {
+    console.error('Failed to create git commit and tag:', error);
+    throw error;
+  }
+}
+
 async function publishPackages(versionBump: 'major' | 'minor' | 'patch' | string = 'patch') {
+  // Bump all versions first
+  const newVersion = bumpAllVersions(versionBump);
+  
+  // Create git commit and tag
+  createGitCommitAndTag(newVersion);
+  
+  // Then publish the packages that need to be published
   for (const pkg of packages) {
     const pkgPath = path.resolve(`packages/${pkg}`);
-    
-    // Bump version before publishing
-    const newVersion = bumpVersion(pkgPath, versionBump);
     
     console.log(`Publishing ${pkg}@${newVersion}...`);
     run('pnpm publish --no-git-checks', pkgPath);

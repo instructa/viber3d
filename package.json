@@ -1,6 +1,7 @@
 {
   "name": "@viber3d/viber3d-monorepo",
   "private": true,
+  "version": "0.0.3",
   "homepage": "https://codetie.ai",
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
@@ -17,8 +18,6 @@
     "lint": "eslint --cache .",
     "typecheck": "tsc -p scripts --noEmit && pnpm -r --parallel run typecheck",
     "build": "pnpm -r --filter='./packages/create-viber3d' run build",
-    "publish": "pnpm -r --filter='./packages/create-viber3d' run build && npx release-it --git.pushRepo=https://github.com/instructa/viber3d.git && tsx scripts/release.ts",
-    "release": "npx release-it --git.pushRepo=https://github.com/instructa/viber3d.git",
     "publish-npm": "pnpm -r --filter='./packages/create-viber3d' run build &&tsx scripts/release.ts",
     "link-create": "cd packages/create-viber3d && pnpm link --global"
   },
@@ -64,6 +63,5 @@
       "viber3d": "workspace:*"
     }
   },
-  "version": "1.0.10",
   "dependencies": {}
 }

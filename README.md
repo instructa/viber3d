@@ -19,7 +19,7 @@
 - 🎨 **TailwindCSS** - Utility-first CSS framework
 - 📱 **Responsive Design** - Works on all devices
 - 🧠 **State Management** - Zustand for simple state management
-- 🔋 **Physics** - React Three Rapier and Cannon for physics simulations
+- 🔋 **Physics** - React Three Rapier for physics simulations
 - 📏 **TypeScript** - Type safety for your project
 - 🤖 **Cursor AI Integration** - Predefined `.cursor/rules` for enhanced AI assistance
 
