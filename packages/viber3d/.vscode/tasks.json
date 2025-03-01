@@ -1,0 +1,58 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Development Server",
+      "type": "npm",
+      "script": "dev",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*$",
+          "endsPattern": "^.*Local:.+(https?://\\S+|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+:[0-9]+).*$"
+        }
+      },
+      "detail": "Start viber3d"
+    },
+    {
+      "label": "Stop Development Server",
+      "type": "process",
+      "command": "${command:workbench.action.tasks.terminate}",
+      "args": ["Start Development Server"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "detail": "Stop the running development server"
+    },
+    {
+      "label": "Clean",
+      "type": "npm",
+      "script": "clean",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": [],
+      "detail": "Clean node_modules and reinstall dependencies"
+    }
+  ]
+}

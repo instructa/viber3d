@@ -1,0 +1,47 @@
+{
+  "name": "create-viber3d",
+  "version": "0.0.1",
+  "description": "Create a new Viber3D project for building 3D games with React Three Fiber",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "bin": {
+    "create-viber3d": "index.js"
+  },
+  "files": [
+    "dist",
+    "template",
+    "index.js"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "three.js",
+    "react-three-fiber",
+    "game",
+    "3d",
+    "starter-kit",
+    "viber3d"
+  ],
+  "author": "Kevin Kern",
+  "license": "MIT",
+  "dependencies": {
+    "citty": "^0.1.5",
+    "consola": "^3.2.3",
+    "fs-extra": "^11.2.0",
+    "pathe": "^1.1.1",
+    "scule": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3",
+    "unbuild": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

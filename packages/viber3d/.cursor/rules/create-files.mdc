@@ -1,0 +1,14 @@
+---
+description: Activate this rule when creating or updating files to maintain project structure
+globs: src/**/*
+alwaysApply: false
+---
+- Maintain the project structure:
+  - `src/components`: React components and react three fiber components
+  - `src/shaders`: Shader files.
+  - `src/store`: State management (e.g., `gameStore.ts`).
+  - `src/types`: TypeScript definitions.
+  - `src/utils`: Utility functions.
+  - `public/models`: 3D models (`.gltf`, `.bin`).
+  - `public/images`: Textures, images.
+  - `public/sounds`: Audio files.

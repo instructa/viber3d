@@ -1,0 +1,9 @@
+test/
+vitest.config.ts
+docs
+.cursorindexingignore
+scripts
+public
+.cursor/rules
+!.cursor/rules/frontend-3d.mdc
+.repomix-output.txt

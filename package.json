@@ -1,0 +1,68 @@
+{
+  "name": "@viber3d/viber3d-monorepo",
+  "private": true,
+  "homepage": "https://codetie.ai",
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instructa/viber3d"
+  },
+  "license": "MIT",
+  "bin": {
+    "viber3d-create": "./index.js"
+  },
+  "scripts": {
+    "lint": "eslint --cache .",
+    "typecheck": "tsc -p scripts --noEmit && pnpm -r --parallel run typecheck",
+    "build": "pnpm -r --filter='./packages/*' run build",
+    "publish": "pnpm -r --filter='./packages/*' run build && npx release-it --git.pushRepo=https://github.com/viber3d/viber3d.git && tsx scripts/release.ts",
+    "release": "pnpm run build && npx release-it --git.pushRepo=https://github.com/viber3d/viber3d.git",
+    "publish-npm": "tsx scripts/release.ts",
+    "link-create": "cd packages/create-viber3d && pnpm link --global",
+    "test-create": "pnpm -F create-viber3d run create --debug --cwd ./test-output"
+  },
+  "keywords": [
+    "viber3d",
+    "cli",
+    "three",
+    "threejs",
+    "project-setup",
+    "cursor",
+    "cursor-ai",
+    "react-three-fiber"
+  ],
+  "devDependencies": {
+    "@release-it/bumper": "^6.0.1",
+    "@release-it/conventional-changelog": "^8.0.2",
+    "@vitejs/release-scripts": "^1.3.2",
+    "chalk": "^5.3.0",
+    "conventional-changelog-cli": "^5.0.0",
+    "eslint": "^9.10.0",
+    "execa": "^9.3.1",
+    "globals": "^15.9.0",
+    "inquirer": "^10.2.2",
+    "lint-staged": "^15.2.10",
+    "mustache": "^4.2.0",
+    "picocolors": "^1.1.0",
+    "prompts": "^2.4.2",
+    "release-it": "^17.6.0",
+    "rimraf": "^5.0.10",
+    "semver": "^7.5.4",
+    "tslib": "^2.7.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.4.0",
+    "yargs": "^17.7.2",
+    "cursor-tools": "latest"
+  },
+  "packageManager": "pnpm@9.9.0",
+  "pnpm": {
+    "overrides": {
+      "viber3d": "workspace:*"
+    }
+  },
+  "version": "1.0.9",
+  "dependencies": {}
+}

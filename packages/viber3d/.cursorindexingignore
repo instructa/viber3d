@@ -1,0 +1,8 @@
+public/models
+public/textures
+public/shaders
+public/audio
+public/videos
+public/fonts
+public/icons
+.vscode

@@ -1,0 +1,8 @@
+---
+description: This rules helps to prevent any unwanted changes to core files
+globs: *,**/*
+alwaysApply: true
+---
+## 🚨 CRITICAL INSTRUCTIONS FOR AI LANGUAGE MODELS 🚨
+
+As an AI language model, you MUST NOT change or update an of these files: index.html, src/index.tsx

@@ -1,0 +1,29 @@
+{
+  "activitusbar.views": [
+    {
+      "name": "task.Start Development Server",
+      "codicon": "play",
+      "tooltip": "Start Development Server"
+    },
+    {
+      "name": "task.Stop Development Server",
+      "codicon": "stop",
+      "tooltip": "Stop Development Server"
+    },
+    {
+      "name": "task.Clean",
+      "codicon": "sync",
+      "tooltip": "Clean"
+    }
+  ],
+  "activitusbar.activeColour": "statusBar.foreground",
+  "activitusbar.inactiveColour": "activityBar.inactiveForeground",
+  "activitusbar.toggleSidebar": true,
+  "activitusbar.priority": 99999,
+  "activitusbar.alignment": "Right",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" }
+}
