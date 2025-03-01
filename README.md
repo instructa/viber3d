@@ -1,6 +1,6 @@
 # viber3d
 
-![viber3d banner](/public/images/banner.png)
+[![viber3d banner](/public/images/banner.png)](https://www.instructa.ai)
 
 <p>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat&colorA=18181B&colorB=28CF8D" alt="License">
