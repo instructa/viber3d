@@ -1,7 +1,9 @@
 import { Physics } from '@react-three/rapier';
 import { Stats, useGLTF, OrbitControls } from '@react-three/drei';
-import SpaceFighter from './SpaceFighter';
+import SpaceFighter from './components/SpaceFighter';
 import { useControls } from 'leva';
+import { Canvas } from '@react-three/fiber';
+import { Suspense } from 'react';
 
 useGLTF.preload('/models/ship.gltf');
 
@@ -23,9 +25,16 @@ const GameScene = () => {
 
   return (
     <>
+     <Canvas
+      gl={{
+        antialias: false
+      }}
+    >
       <ambientLight intensity={intensity} />
       <Physics debug timeStep="vary" gravity={[0, 0, 0]}>
-        <SpaceFighter rotation={[rotationX, rotationY, rotationZ]} />
+        <Suspense fallback={null}>
+          <SpaceFighter rotation={[rotationX, rotationY, rotationZ]} />
+        </Suspense>
       </Physics>
       <OrbitControls
         enablePan={true}
@@ -34,6 +43,7 @@ const GameScene = () => {
         makeDefault
       />
       <Stats />
+      </Canvas>
     </>
   );
 };

@@ -19,6 +19,8 @@ You are an expert in React Three Fiber, TypeScript, and React 19. You produce cl
 - Use useRef<T>(null) instead of MutableRefObject<T> in React, including React Three Fiber, as all refs are now mutable by default.
 - No forwardRef for child instances – Use props or event handlers instead.
 - Avoid useImperativeHandle – Prefer state or context for reactivity.
+- Never add div or html inside react three fiber <Canvas>
+- Use always tailwindcss for css styles
 
 ## Performance
 - Always write functional components; avoid class components entirely.

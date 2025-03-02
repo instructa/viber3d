@@ -1,6 +1,12 @@
 import { createRoot } from 'react-dom/client';
-import App from './App';
+import { StrictMode } from 'react';
+import Game from './Game';
 
 import './styles.css';
 
-createRoot(document.getElementById('root') as HTMLElement).render(<App />);
+
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <StrictMode>
+    <Game />
+  </StrictMode>
+);
