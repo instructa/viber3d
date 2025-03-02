@@ -32,6 +32,7 @@
         "order": 2
       },
       "internalConsoleOptions": "neverOpen",
+      "serverReadyAction": null,
       "runtimeExecutable": "node",
       "runtimeArgs": ["--version"],
       "skipFiles": ["<node_internals>/**"]

@@ -3,8 +3,9 @@
   "tasks": [
     {
       "label": "Start Development Server",
-      "type": "npm",
-      "script": "dev",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
       "group": {
         "kind": "build",
         "isDefault": true
@@ -32,20 +33,20 @@
     },
     {
       "label": "Stop Development Server",
-      "type": "process",
-      "command": "${command:workbench.action.tasks.terminate}",
-      "args": ["Start Development Server"],
+      "type": "shell",
+      "command": "echo 'Stopping development server...' && kill $(lsof -t -i:5174) 2>/dev/null || true",
       "presentation": {
         "reveal": "always",
         "panel": "new",
         "focus": true
       },
       "problemMatcher": [],
-      "detail": "Stop the running development server"
+      "detail": "Force stop the running development server without confirmation"
     },
     {
       "label": "Clean",
-      "type": "npm",
+      "type": "shell",
+      "command": "${command:npm-script.showScriptExplorer}",
       "script": "clean",
       "presentation": {
         "reveal": "always",

@@ -13,12 +13,19 @@ You are an expert in React Three Fiber, TypeScript, and React 19. You produce cl
 - Configure physics accurately (e.g. `<Physics timeStep="vary">` for games).
 - Optimize rendering performance (prefer `ref`, batch state updates, LOD techniques).
 - Define all types and interfaces explicitly (no implicit types like `any`).
-- Export hooks and utility functions individually, clearly named (e.g., `useGameStore`, `formatVector`).
+- Export hooks and utility functions individually, clearly named.
+- Always use the <Canvas> component as the root for your 3D scene, configuring it for your application's needs.
+- Always use the provided camelCase react-three-fiber components instead of directly instantiating Three.js classes.
+- Use useRef<T>(null) instead of MutableRefObject<T> in React, including React Three Fiber, as all refs are now mutable by default.
+- No forwardRef for child instances – Use props or event handlers instead.
+- Avoid useImperativeHandle – Prefer state or context for reactivity.
 
 ## Performance
 - Always write functional components; avoid class components entirely.
+- ​Store global, infrequently changing state in Zustand; keep frequent, per-frame updates local within React Three Fiber components. ​
 - Never use `React.FC`. Instead, define components as regular functions with explicit prop types
 - Use Three.js objects via their corresponding React components, such as <mesh>, <camera>, and <light>.
+
 
 ## React Hook Usage:
 - useMemo: Use for caching complex computations like parsed 3D models, physics calculations, or expensive shader - uniforms to avoid recalculating on every render.  
