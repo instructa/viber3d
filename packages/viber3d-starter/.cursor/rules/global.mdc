@@ -1,5 +1,5 @@
 ---
-description: Global Project rule. ALWAS apply this rule
+description: Global Project rule. ALWAYS apply this rule
 globs: *,**/*
 alwaysApply: true
 ---
