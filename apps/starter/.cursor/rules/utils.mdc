@@ -1,0 +1,31 @@
+---
+description: "Utility function patterns for the starfighter game engine"
+globs: src/utils/**/*.ts
+---
+
+## Koota Entity Integration
+- Access entity traits using the entity.get(Trait) pattern
+- Handle missing traits gracefully with null checks
+
+## THREE.js Integration
+- Use THREE.js vector types for spatial operations
+- Leverage built-in THREE.js methods for calculations
+
+## Performance Optimization
+- Reuse arrays in spatial operations to reduce GC pressure
+- Implement appropriate spatial partitioning for proximity searches
+- Allow passing in existing arrays to be filled rather than creating new ones
+
+## Spatial Data Structures
+- Use appropriate spatial partitioning for efficient entity lookups
+- Handle entity movement between spatial regions
+- Provide configurable parameters for performance tuning
+- Include reset functionality for reuse
+
+## Math Utilities
+- Implement common math operations as reusable functions
+- Handle edge cases and bounds appropriately
+
+## Documentation
+- Add source attribution for adapted code
+- Document performance characteristics for spatial operations 

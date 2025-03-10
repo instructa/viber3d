@@ -1,0 +1,84 @@
+---
+description: Coding Standards for React Three Fiber Components
+globs: src/components/**/*.tsx
+alwaysApply: false
+---
+
+## Core R3F Component Principles
+
+- Use functional components with Hooks (no class components)
+- Clean up resources in useEffect return functions to prevent memory leaks
+- Define props with TypeScript interfaces
+- Keep components purely visual; game logic belongs in systems
+
+## Performance Guidelines
+
+- Avoid unmounting large scene nodes; toggle visibility instead
+- Use memoization only where needed (useMemo/useCallback)
+- Cache initialization values as constants
+- Avoid unnecessary trait updates
+
+## R3F Component Patterns
+
+### Asset Loading
+- Use `useGLTF` for models, preload with `useGLTF.preload(src)`
+- Handle model cleanup in useEffect return function
+- Handle loading states appropriately
+
+### Entity & Scene Management
+- Use `<group>` for transform hierarchies
+- Type refs properly: `useRef<Group | null>(null) as MutableRefObject<Group | null>`
+- Initialize traits only when needed: `if (!entity.has(Transform))`
+- Keep initial states as constants
+
+### Component Structure
+```typescript
+function GameComponent({ entity }: { entity: Entity }) {
+    // 1. Refs & assets
+    const groupRef = useRef<Group | null>(null) as MutableRefObject<Group | null>;
+    const { scene } = useGLTF(MODEL_URL);
+    
+    // 2. Initialize with useCallback
+    const setInitial = useCallback((group: Group | null) => {
+        if (!group) return;
+        groupRef.current = group;
+        
+        // Only set traits if needed
+        if (!entity.has(Transform)) entity.set(Transform, INITIAL_STATE);
+        entity.add(Ref(scene));
+    }, [entity, scene]);
+    
+    // 3. React to state changes
+    useTraitEffect(entity, Transform, (transform) => {
+        if (!groupRef.current || !transform) return;
+        // Update visual representation only
+        groupRef.current.position.copy(transform.position);
+    });
+    
+    return <group ref={setInitial}><primitive object={scene} /></group>;
+}
+```
+
+### Resource Cleanup
+```typescript
+useEffect(() => {
+    return () => {
+        scene.traverse((obj) => {
+            if (obj instanceof THREE.Mesh) {
+                obj.geometry?.dispose();
+                obj.material instanceof Array 
+                    ? obj.material.forEach(m => m.dispose())
+                    : obj.material?.dispose();
+            }
+        });
+    };
+}, [scene]);
+```
+
+## Anti-Patterns
+- ❌ Don't use useFrame for game logic, only for visual effects
+- ❌ Don't modify traits directly in components
+- ❌ Don't store game state in React state
+- ❌ Don't skip null checks on refs or traits
+- ❌ Don't handle player input in components (use systems)
+- ❌ Don't initialize traits without checking existence
