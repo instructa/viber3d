@@ -1,6 +1,6 @@
 {
-  "name": "@viber3d/cli",
-  "version": "0.0.0",
+  "name": "viber3d",
+  "version": "0.0.4",
   "description": "Create a new Viber3D project for building 3D games with React Three Fiber",
   "type": "module",
   "main": "dist/index.mjs",
