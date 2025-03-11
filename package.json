@@ -22,7 +22,10 @@
     "build:templates": "pnpm -r --filter './templates/**' build",
     "build:docs": "pnpm -r --filter './docs/**' dev",
     "dev:docs": "pnpm -r --filter './docs/**' dev",
-    "clean": "npx clean-modules node_modules **/node_modules"
+    "clean": "npx clean-modules node_modules **/node_modules",
+    "release": "pnpm build:packages && pnpm --filter viber3d release",
+    "release:alpha": "pnpm build:packages && pnpm --filter viber3d release:alpha",
+    "release:edge": "pnpm build:packages && pnpm --filter viber3d release:edge"
   },
   "keywords": [
     "viber3d",

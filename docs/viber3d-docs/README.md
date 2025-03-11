@@ -72,6 +72,10 @@ yarn preview
 bun run preview
 ```
 
+## Demo
+
+Experience Viber3D in action at our live demo: [viber3d-spacewars.kevinkern.dev](https://viber3d-spacewars.kevinkern.dev/)
+
 ## Documentation Structure
 
 The documentation is organized into the following sections:
