@@ -18,6 +18,7 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm -r build",
+    "build:packages": "pnpm -r --filter './packages/**' build",
     "build:templates": "pnpm -r --filter './templates/**' build",
     "build:docs": "pnpm -r --filter './docs/**' build"
   },
