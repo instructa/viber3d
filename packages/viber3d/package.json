@@ -1,0 +1,52 @@
+{
+  "name": "@viber3d/cli",
+  "version": "0.0.0",
+  "description": "Create a new Viber3D project for building 3D games with React Three Fiber",
+  "type": "module",
+  "main": "dist/index.mjs",
+  "files": [
+    "dist",
+    "template",
+    "index.js"
+  ],
+  "bin": {
+    "viber3d": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instructa/viber3d"
+  },
+  "keywords": [
+    "viber3d",
+    "cli",
+    "three",
+    "threejs",
+    "project-setup",
+    "cursor",
+    "cursor-ai",
+    "react-three-fiber",
+    "ai-coding",
+    "instructa"
+  ],
+  "author": "Kevin Kern",
+  "license": "MIT",
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "citty": "^0.1.5",
+    "consola": "^3.2.3",
+    "fs-extra": "^11.2.0",
+    "giget": "^2.0.0",
+    "pathe": "^1.1.1",
+    "scule": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3",
+    "unbuild": "^2.0.0"
+  }
+}
