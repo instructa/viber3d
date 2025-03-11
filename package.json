@@ -20,7 +20,9 @@
     "build": "pnpm -r build",
     "build:packages": "pnpm -r --filter './packages/**' build",
     "build:templates": "pnpm -r --filter './templates/**' build",
-    "build:docs": "pnpm -r --filter './docs/**' build"
+    "build:docs": "pnpm -r --filter './docs/**' dev",
+    "dev:docs": "pnpm -r --filter './docs/**' dev",
+    "clean": "npx clean-modules node_modules **/node_modules"
   },
   "keywords": [
     "viber3d",
@@ -42,6 +44,10 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "better-sqlite3"
-    ]
+    ],
+    "overrides": {}
+  },
+  "dependencies": {
+    "@viber3d/cli": "link:packages/viber3d"
   }
 }

@@ -5,7 +5,17 @@ const { footer } = useAppConfig()
 <template>
   <UFooter>
     <template #left>
-      {{ footer.credits }}
+      {{ footer.credits }} <ULink
+        class="text-red-400"
+        href="https://x.com/kregenrek"
+        target="_blank"
+        color="primary"
+      >Kevin Kern</ULink> and <ULink
+        class="text-red-400"
+        href="https://www.instructa.ai"
+        target="_blank"
+        color="primary"
+      >Instructa.ai</ULink>
     </template>
 
     <template #right>

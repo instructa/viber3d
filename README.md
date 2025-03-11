@@ -22,6 +22,7 @@
 - 🔋 **Physics** - React Three Rapier for physics simulations
 - 📏 **TypeScript** - Type safety for your project
 - 🤖 **Cursor AI Integration** - Predefined `.cursor/rules` for enhanced AI assistance
+- 🧩 **Entity Component System** - Flexible and performant game architecture via koota library
 
 ## Getting Started
 
@@ -56,6 +57,27 @@ npm run build
 ```
 
 6. Deploy on a live server! 🌎
+
+## Documentation
+
+viber3D comes with comprehensive documentation to help you get started:
+
+- **Core Concepts** - Learn about the fundamental architecture and patterns
+- **ECS Overview** - Detailed guide to the Entity Component System architecture
+- **Tutorials** - Step-by-step guides for common game development tasks
+
+Visit the [documentation site](/docs/viber3d-docs) to learn more.
+
+## Credits
+
+Viber3D stands on the shoulders of giants:
+
+- **[Koota](https://github.com/krispya/koota)** - The ECS library that powers our game architecture
+- **[React Three Fiber](https://github.com/pmndrs/react-three-fiber)** - React renderer for Three.js
+- **[Three.js](https://threejs.org/)** - The core 3D library
+- **[Nuxt](https://nuxt.com/)** & **[UnJS](https://unjs.io/)** - Powering our documentation system
+
+See our [full credits page](/docs/viber3d-docs/content/7.credits) for more details.
 
 ## AI Code Editor Integration
 

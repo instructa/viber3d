@@ -1,25 +1,24 @@
 ---
 seo:
-  title: Nuxt UI Pro - Docs template
-  description: Nuxt UI Pro is a collection of premium Vue components built on top
-    of Nuxt UI to create beautiful & responsive Nuxt applications in minutes.
+  title: Viber3D Documentation
+  description: Viber3D is a powerful 3D game starter kit built for modern web browsers, enabling developers to create immersive 3D experiences with ease.
 ---
 
 ::u-page-hero
 ---
 orientation: horizontal
 ---
-  :::prose-pre{filename="Terminal" code="npx nuxi init -t github:nuxt-ui-pro/docs"}
+  :::prose-pre{filename="Terminal" code="npm install @instructa/viber3d"}
   ```bash
-  npx nuxi init -t github:nuxt-ui-pro/docs
+  npx viber3d@latest init
   ```
   :::
 
 #title
-Build your docs with Nuxt UI Pro
+Build 3D Games with Viber3D
 
 #description
-Nuxt UI Pro is a collection of premium components built on top of Nuxt UI to create beautiful & responsive applications in minutes.
+Viber3D is a modern, performant 3D game starter kit that makes it easy to create immersive web-based games and interactive experiences.
 
 #links
   :::u-button
@@ -37,107 +36,82 @@ Nuxt UI Pro is a collection of premium components built on top of Nuxt UI to cre
   icon: i-simple-icons-github
   size: xl
   target: _blank
-  to: https://github.com/nuxt-ui-pro/docs/tree/v3
+  to: https://github.com/instructa/viber3d
   variant: subtle
   ---
-  Use this template
+  View on GitHub
   :::
 ::
 
 ::u-page-section
 #title
-All-in-one documentation template
-
-#links
-  :::u-button
-  ---
-  color: neutral
-  size: lg
-  target: _blank
-  to: https://ui3.nuxt.dev/getting-started/installation/pro/nuxt
-  trailingIcon: i-lucide-arrow-right
-  variant: subtle
-  ---
-  Discover Nuxt UI Pro v3
-  :::
+Complete 3D Game Starter Kit
 
 #features
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://nuxt.com
+  icon: i-lucide-box
   ---
   #title
-  Nuxt 3
+  3D Physics
 
   #description
-  Powered by Nuxt 3 for optimal performances and SEO.
+  Built-in physics engine for realistic object interactions and collisions.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-markdown
-  target: _blank
-  to: https://content.nuxt.com
+  icon: i-lucide-gamepad-2
   ---
   #title
-  Markdown
+  Game Systems
 
   #description
-  Write your pages with MDC thanks to Nuxt Content.
+  Comprehensive game systems including input handling, audio, and networking.
   :::
 
   :::u-page-feature
   ---
   icon: i-lucide-sparkles
-  target: _blank
-  to: https://ui3.nuxt.dev
   ---
   #title
-  Nuxt UI v3
+  Modern Architecture
 
   #description
-  Offers a very large set of full customizable components.
+  Built with modern web technologies for optimal performance.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-typescript
-  target: _blank
-  to: https://www.typescriptlang.org
+  icon: i-lucide-code
   ---
   #title
   TypeScript
 
   #description
-  A fully typed development experience.
+  Fully typed development experience for better code quality.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxtdotjs
-  target: _blank
-  to: https://content.nuxt.com/docs/studio
+  icon: i-lucide-component
   ---
   #title
-  Nuxt Studio
+  Component System
 
   #description
-  Supported by Nuxt Studio for fast updates and previews.
+  Flexible component-based architecture for building complex game objects.
   :::
 
   :::u-page-feature
   ---
   icon: i-lucide-search
-  target: _blank
-  to: https://ui3.nuxt.dev/components/content-search
   ---
   #title
-  Search
+  Documentation
 
   #description
-  A full-text search modal powered by Fuse.js.
+  Comprehensive docs with examples, tutorials, and references.
   :::
 ::
 
@@ -145,20 +119,18 @@ All-in-one documentation template
   :::u-page-c-t-a
   ---
   links:
-    - label: Buy now
-      to: https://ui.nuxt.com/pro/purchase
-      target: _blank
-      icon: i-lucide-shopping-cart
-      color: neutral
-    - label: License
-      to: https://ui3.nuxt.dev/getting-started/license
-      trailingIcon: i-lucide-circle-help
+    - label: Get Started
+      to: /getting-started
+      icon: i-lucide-play
+      color: primary
+    - label: GitHub
+      to: https://github.com/instructa/viber3d
+      trailingIcon: i-simple-icons-github
       target: _blank
       color: neutral
       variant: subtle
-  description: Nuxt UI Pro is free in development, but you need a license to use
-    it in production.
-  title: Start with Nuxt UI Pro today!
+  description: Start building your 3D game today with Viber3D's powerful features and intuitive API.
+  title: Create Amazing 3D Games!
   variant: subtle
   ---
   :::

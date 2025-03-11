@@ -1,16 +1,15 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// Configuration for Viber3D documentation
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui-pro',
     '@nuxt/content',
-    'nuxt-og-image',
-    'nuxt-llms',
+    'nuxt-og-image'
   ],
 
   devtools: {
-    enabled: true,
+    enabled: true
   },
 
   css: ['~/assets/css/main.css'],
@@ -19,14 +18,14 @@ export default defineNuxtConfig({
     build: {
       markdown: {
         toc: {
-          searchDepth: 1,
-        },
-      },
-    },
+          searchDepth: 1
+        }
+      }
+    }
   },
 
   future: {
-    compatibilityVersion: 4,
+    compatibilityVersion: 4
   },
 
   compatibilityDate: '2024-07-11',
@@ -34,48 +33,55 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: ['/'],
-      crawlLinks: true,
-    },
+      crawlLinks: true
+    }
   },
 
   eslint: {
     config: {
       stylistic: {
         commaDangle: 'never',
-        braceStyle: '1tbs',
-      },
-    },
+        braceStyle: '1tbs'
+      }
+    }
   },
 
   icon: {
-    provider: 'iconify',
-  },
+    provider: 'iconify'
+  }
 
-  llms: {
-    domain: 'https://docs-template.nuxt.dev/',
-    title: 'Nuxt UI Pro - Docs template',
-    description:
-      'A template for building documentation with Nuxt UI Pro and Nuxt Content',
-    full: {
-      title: 'Nuxt UI Pro - Docs template Full Documentation',
-      description:
-        'This is the full documentation for the Nuxt UI Pro - Docs template',
-    },
-    sections: [
-      {
-        title: 'Getting Started',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/getting-started%' },
-        ],
-      },
-      {
-        title: 'Essentials',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/essentials%' },
-        ],
-      },
-    ],
-  },
+  // llms: {
+  //   domain: 'https://viber3d-docs.instructa.dev/',
+  //   title: 'Viber3D Documentation',
+  //   description:
+  //     'Documentation for Viber3D - A modern 3D game engine for the web',
+  //   full: {
+  //     title: 'Viber3D Full Documentation',
+  //     description:
+  //       'This is the full documentation for the Viber3D game engine',
+  //   },
+  //   sections: [
+  //     {
+  //       title: 'Getting Started',
+  //       contentCollection: 'docs',
+  //       contentFilters: [
+  //         { field: 'path', operator: 'LIKE', value: '/getting-started%' },
+  //       ],
+  //     },
+  //     {
+  //       title: 'Core Concepts',
+  //       contentCollection: 'docs',
+  //       contentFilters: [
+  //         { field: 'path', operator: 'LIKE', value: '/core-concepts%' },
+  //       ],
+  //     },
+  //     {
+  //       title: 'Systems',
+  //       contentCollection: 'docs',
+  //       contentFilters: [
+  //         { field: 'path', operator: 'LIKE', value: '/systems%' },
+  //       ],
+  //     },
+  //   ],
+  // },
 })

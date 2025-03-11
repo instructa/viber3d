@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Viber3D Documentation
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This repository contains the official documentation for Viber3D, a modern 3D game starter kit for the web.
 
 ## Setup
 
@@ -72,4 +72,24 @@ yarn preview
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Documentation Structure
+
+The documentation is organized into the following sections:
+
+- **Introduction**: Overview of Viber3D and its features
+- **Getting Started**: Installation and basic usage
+- **Core Concepts**: Entity Component System, Entities, Traits, Systems, and Components
+- **Systems**: Detailed information about built-in systems
+
+## Contributing
+
+Contributions to the documentation are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+Viber3D and its documentation are licensed under the MIT License.
