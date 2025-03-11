@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@viber3d/cli':
-        specifier: link:packages/viber3d
-        version: link:packages/viber3d
     devDependencies:
       '@types/node':
         specifier: ^22.13.10

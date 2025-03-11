@@ -49,8 +49,5 @@
       "better-sqlite3"
     ],
     "overrides": {}
-  },
-  "dependencies": {
-    "@viber3d/cli": "link:packages/viber3d"
   }
 }
