@@ -1,0 +1,54 @@
+---
+description: "TypeScript best practices for trait modules"
+globs: src/traits/**/*.ts
+---
+
+## Trait Design Core Principles
+- Store minimal data; keep logic in systems
+- Each trait has one focused responsibility
+- Follow TypeScript strict mode, avoid `any` types
+- Define clear interfaces for trait structures
+- Document trait purpose with JSDoc comments
+
+## Koota Implementation
+- Use pattern: `export const TraitName = trait({ ... })`
+- Use factory functions for objects: `vector: () => new THREE.Vector3()`
+- Use direct values for primitives: `forward: 0, boost: false`
+- Follow naming convention: PascalCase for traits, kebab-case for files
+- Export all traits from index.ts
+
+## THREE.js Integration
+- Use THREE.js objects for spatial properties (Vector3, Euler)
+- Initialize objects with default values
+- Use factory functions to avoid shared references:
+```typescript
+export const Movement = trait({
+  velocity: () => new THREE.Vector3(),
+  acceleration: () => new THREE.Vector3(),
+});
+```
+
+## Trait Initialization
+- Use constants for default values:
+```typescript
+const INITIAL_STATE = {
+  position: new THREE.Vector3(),
+  rotation: new THREE.Euler(),
+} as const;
+
+// In components
+if (!entity.has(Transform)) {
+  entity.set(Transform, INITIAL_STATE);
+}
+```
+
+## Reference Management
+- Use Ref trait for Three.js object references
+- Clear references when entity is destroyed
+- Handle null references safely
+
+## Anti-Patterns
+- ❌ Don't share mutable objects between trait instances
+- ❌ Don't store React refs or DOM elements in traits
+- ❌ Don't initialize traits without checking existence
+- ❌ Don't mix visual state with game state

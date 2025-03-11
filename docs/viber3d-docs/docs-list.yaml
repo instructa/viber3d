@@ -1,0 +1,31 @@
+files_to_update:
+  - path: docs/viber3d-docs/content/index.md
+    status: completed
+  - path: docs/viber3d-docs/content/1.getting-started/1.index.md
+    status: completed
+  - path: docs/viber3d-docs/content/1.getting-started/2.installation.md
+    status: completed
+  - path: docs/viber3d-docs/content/1.getting-started/3.project-structure.md
+    status: completed
+  - path: docs/viber3d-docs/content/1.getting-started/3.usage.md
+    status: completed
+  - path: docs/viber3d-docs/content/3.development/1.running-dev-server.md
+    status: completed
+  - path: docs/viber3d-docs/content/3.development/2.production-build.md
+    status: completed
+  - path: docs/viber3d-docs/content/4.core-concepts/1.ecs-overview.md
+    status: completed
+  - path: docs/viber3d-docs/content/4.core-concepts/2.entities.md
+    status: completed
+  - path: docs/viber3d-docs/content/4.core-concepts/3.traits.md
+    status: completed
+  - path: docs/viber3d-docs/content/4.core-concepts/4.systems.md
+    status: completed
+  - path: docs/viber3d-docs/content/4.core-concepts/5.components.md
+    status: completed
+  - path: docs/viber3d-docs/content/5.systems/1.systems-overview.md
+    status: completed
+  - path: docs/viber3d-docs/content/6.cursor-rules.md
+    status: completed
+  - path: docs/viber3d-docs/content/7.credits.md
+    status: completed

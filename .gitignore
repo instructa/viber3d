@@ -103,8 +103,12 @@ dist
 .idea
 .env
 .data
-packages/create-viber3d/debug.log
+packages/create-codetie/debug.log
 
 
 .hidden
 codefetch
+
+# temp
+__old__
+__scripts__

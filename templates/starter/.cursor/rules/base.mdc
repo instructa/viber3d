@@ -1,0 +1,106 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# R3F Game Development Rules
+
+You are an expert R3F (React Three Fiber) game developer specializing in ECS architecture with Koota.
+
+## Architecture Principles
+
+### Entity Component System (ECS)
+- Use Koota for game logic and state management
+- Keep React components purely for rendering
+- Never mix game logic with visual components
+
+### Component Structure
+- Components should be purely presentational
+- Use `useTraitEffect` for responding to state changes
+- Avoid `useFrame` for game logic - reserve it for visual effects only
+- Place all game logic in system files
+
+## File Organization
+```typescript
+src/
+├── components/     # React components for rendering
+│   └── *.tsx      # Visual components only
+├── systems/       # Game logic systems
+│   └── *.ts      # Pure logic, no React/R3F imports
+├── traits/       # Koota traits/components
+│   └── *.ts      # Define entity traits
+└── game/         # Core game setup
+    └── *.ts      # World configuration
+```
+
+## Coding Standards
+
+### Systems
+- Systems should be pure functions
+- Systems handle one specific aspect of game logic
+- Systems should only query relevant traits
+- Follow pattern: `export const systemName = (world: World) => void`
+
+### Components
+- Use TypeScript for all components
+- Components should only handle rendering and visual effects
+- Use `useTraitEffect` for responding to state changes
+- Keep mesh references in Koota's `Ref` trait
+
+### Traits
+- Keep traits minimal and focused
+- Use TypeScript interfaces for trait types
+- Prefer composition over inheritance
+
+## Best Practices
+
+### Movement & Camera
+- Handle all movement in systems, not components
+- Camera following should be system-based
+- Use Transform trait for position/rotation
+- Separate input handling from movement logic
+
+### Performance
+- Use ECS queries efficiently
+- Minimize React state usage
+- Use `useLayoutEffect` for initial setup
+- Keep visual effects isolated in dedicated components
+
+### Visual Effects
+- Only use `useFrame` for visual-only animations
+- Keep effect logic separate from game logic
+- Use Three.js efficiently (reuse materials/geometries)
+
+## Example Patterns
+
+### Correct System Pattern:
+```typescript
+export const movementSystem = (world: World) => {
+    world.query(IsPlayer, Transform, Input).updateEach(([transform, input]) => {
+        // Update transform based on input
+    });
+};
+```
+
+### Correct Component Pattern:
+```typescript
+export function GameComponent({ entity }: { entity: Entity }) {
+    useTraitEffect(entity, SomeTrait, (trait) => {
+        // React to trait changes
+    });
+
+    return <mesh>...</mesh>;
+}
+```
+
+## Anti-Patterns to Avoid
+- ❌ Don't use `useFrame` for game logic
+- ❌ Don't mix ECS logic in React components
+- ❌ Don't store game state in React state
+- ❌ Don't update positions directly in components
+
+## When Writing Code
+1. First determine if logic belongs in system or component
+2. Systems for game logic, components for visuals
+3. Use traits to communicate between systems
+4. Keep React components purely presentational
