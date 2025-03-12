@@ -20,7 +20,7 @@
     "build": "pnpm -r build",
     "build:packages": "pnpm -r --filter './packages/**' build",
     "build:templates": "pnpm -r --filter './templates/**' build",
-    "build:docs": "pnpm -r --filter './docs/**' dev",
+    "build:docs": "pnpm -r --filter './docs/**' build",
     "dev:docs": "pnpm -r --filter './docs/**' dev",
     "clean": "npx clean-modules node_modules **/node_modules",
     "release": "pnpm build:packages && pnpm --filter viber3d release",

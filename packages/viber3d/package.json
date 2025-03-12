@@ -1,6 +1,6 @@
 {
   "name": "viber3d",
-  "version": "0.0.5-alpha.2",
+  "version": "0.0.5-alpha.3",
   "description": "Create a new Viber3D project for building 3D games with React Three Fiber",
   "type": "module",
   "main": "dist/index.mjs",

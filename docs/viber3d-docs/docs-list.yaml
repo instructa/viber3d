@@ -23,6 +23,8 @@ files_to_update:
     status: completed
   - path: docs/viber3d-docs/content/4.core-concepts/5.components.md
     status: completed
+  - path: docs/viber3d-docs/content/4.core-concepts/6.koota-ecs.md
+    status: completed
   - path: docs/viber3d-docs/content/5.systems/1.systems-overview.md
     status: completed
   - path: docs/viber3d-docs/content/6.cursor-rules.md
