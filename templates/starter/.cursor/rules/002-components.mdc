@@ -45,3 +45,4 @@ function EnemyView({ entity }: { entity: Entity }) {
 - Do not place ECS or game logic in React state.
 - Do not mutate ECS traits directly from a component. Use systems or actions.
 - Do not rely on `useFrame` for core game logic; reserve it for minor visual effects only.
+

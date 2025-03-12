@@ -1,0 +1,71 @@
+---
+description: Viber3D Coding Guidelines
+globs: *,**/*
+alwaysApply: true
+---
+
+# R3F + Koota ECS Base Rules
+
+## Core Architecture
+
+- Use Koota ECS for all game logic.
+- Keep React components purely presentational.
+- Do not mix ECS logic and React rendering.
+
+# Instructions
+
+1. Always use codebase_search with target_directories="src" first to find existing core files
+2. Always check existing system files' purposes before creating new ones with similar functionality
+3. Always check how core objects (World, Entity, etc.) are instantiated in the existing codebase
+4. Always list the cursor rules you're using this is for debugging purpose
+
+
+## Directory Structure
+```
+viber3d/
+├── src
+│   ├── assets/                 # 3D models, textures, images
+│   ├── components/             # React components for rendering 3D objects/UI
+│   ├── systems/                # ECS Systems for game logic updates
+│   ├── traits/                 # ECS Traits (components) describing entity data
+│   ├── utils/                  # Utility functions (math, sorting, spatial hashing)
+│   ├── actions.ts              # Central actions to spawn or modify entities
+│   ├── app.tsx                 # Main React component (root of your 3D scene)
+│   ├── gameloop.ts             # Main ECS update loop (formerly called frameloop)
+│   ├── index.css               # Global CSS or Tailwind CSS (if used)
+│   ├── main.tsx                # React app root, renders <App />
+│   ├── startup.tsx             # Startup logic (initial spawns, intervals)
+│   └── world.ts                # Creates the ECS world with default traits
+├── index.html                  # Basic HTML page with root div
+├── package.json                # Project dependencies and scripts
+└── tsconfig.json               # TypeScript configuration
+```
+
+## Important Guidelines
+
+1. Systems must be stateless functions that query traits and update ECS data.
+2. Components only render visuals; use `useTraitEffect` to reflect trait changes.
+3. Traits hold data; avoid logic in them. Keep them minimal and typed.
+4. Relationships (`relation()`) can be used for parent-child or referencing entities.
+5. SoA vs AoS: Use schema-based traits for large numeric data, callback-based traits for complex objects.
+6. Advanced Queries: Use partial selection (`.select(...)`) or specialized operators (`Not`, `Or`, `createAdded`, etc.) when needed.
+7. Scheduling: If you have multiple systems, consider a scheduling approach so only relevant systems run in different states (e.g. paused vs. active).
+8. If we have linter/typescript errors try to not be that restrictive with types.
+
+## Anti-Patterns
+
+- Do not place game logic in React hooks (e.g. `useFrame`), except for purely visual effects.
+- Avoid storing ECS-related state in React state.
+- Never mutate traits inside components. Use systems or actions instead.
+- Do not initialize or destroy ECS entities directly in components (use an action or system).
+
+## Steps
+
+1. When implementing any ECS feature, always follow this order:
+2. Define all traits first
+3. Document trait dependencies (which traits need each other)
+4. Create a spawn function that bundles ALL required traits together
+5. Only then implement the systems that operate on these traits
+
+
+
