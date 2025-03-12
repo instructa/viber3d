@@ -57,6 +57,9 @@ importers:
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
+      unist-util-visit:
+        specifier: ^5.0.0
+        version: 5.0.0
       vue-tsc:
         specifier: ^2.2.2
         version: 2.2.8(typescript@5.8.2)
