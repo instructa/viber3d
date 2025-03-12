@@ -104,3 +104,22 @@ export function GameComponent({ entity }: { entity: Entity }) {
 2. Systems for game logic, components for visuals
 3. Use traits to communicate between systems
 4. Keep React components purely presentational
+5. Always map out the existing architecture before writing code
+6. Look for patterns in how features are organized
+7. Identify the core architectural components
+
+If you see:
+- components/feature-name/
+- systems/feature-name/
+- traits/feature-name/
+- Use these same patterns for new features
+
+Search for:
+- Similar feature names
+- Base components (like "Game", "App", "Main")
+- Common patterns (like "*Container", "*Provider")
+
+Stop and investigate if you find:
+- Similar class/component names
+- Multiple entry points
+- Parallel implementations of core features
