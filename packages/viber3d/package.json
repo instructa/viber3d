@@ -1,6 +1,6 @@
 {
   "name": "viber3d",
-  "version": "0.0.5-alpha.3",
+  "version": "0.0.4",
   "description": "Create a new Viber3D project for building 3D games with React Three Fiber",
   "type": "module",
   "main": "dist/index.mjs",
@@ -35,8 +35,7 @@
     "dev": "unbuild --stub",
     "prepublishOnly": "npm run build",
     "release": "npm publish",
-    "release:alpha": "npm version prerelease --preid=alpha && npm publish --tag alpha",
-    "release:edge": "npm version prerelease --preid=edge && npm publish --tag edge"
+    "release:alpha": "npm publish --tag alpha"
   },
   "publishConfig": {
     "access": "public"

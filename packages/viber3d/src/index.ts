@@ -166,7 +166,7 @@ const initCommand = defineCommand({
       // Download template using giget
       consola.info('Downloading Viber3D template...')
       try {
-        await downloadTemplate('gh:instructa/viber3d/packages/viber3d-starter', {
+        await downloadTemplate('gh:instructa/viber3d/templates/starter', {
           dir: root,
           force: shouldForce
         })

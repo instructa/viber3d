@@ -24,6 +24,11 @@
 - 🤖 **Cursor AI Integration** - Predefined `.cursor/rules` for enhanced AI assistance
 - 🧩 **Entity Component System** - Flexible and performant game architecture via koota library
 
+## Demo
+
+Try out Viber3D with our live demo: [viber3d-spacewars.kevinkern.dev](https://viber3d-spacewars.kevinkern.dev/)
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -162,7 +167,3 @@ Viber3D stands on the shoulders of giants:
 - **[Nuxt](https://nuxt.com/)** & **[UnJS](https://unjs.io/)** - Powering our docs + build system
 
 See our [full credits page](/docs/viber3d-docs/content/7.credits) for more details.
-
-## Demo
-
-Try out Viber3D with our live demo: [viber3d-spacewars.kevinkern.dev](https://viber3d-spacewars.kevinkern.dev/)
