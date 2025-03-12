@@ -1,4 +1,4 @@
-This file is a merged representation of a subset of the codebase, containing specifically included files and files not matching ignore patterns, combined into a single document by Repomix.
+This file is a merged representation of a subset of the codebase, containing specifically included files, combined into a single document by Repomix.
 
 ================================================================
 File Summary
@@ -36,8 +36,7 @@ Notes:
 ------
 - Some files may have been excluded based on .gitignore rules and Repomix's configuration
 - Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
-- Only files matching these patterns are included: **/*.md
-- Files matching these patterns are excluded: **/1.index.md, index.md, *credits*.md, *viber3d*
+- Only files matching these patterns are included: 4.core-concepts/*.md, 5.addons/*.md
 - Files matching patterns in .gitignore are excluded
 - Files matching default ignore patterns are excluded
 
@@ -47,685 +46,21 @@ Additional Info:
 ================================================================
 Directory Structure
 ================================================================
-1.getting-started/
-  2.installation.md
-  3.project-structure.md
-  4.usage.md
-  5.demo.md
-  6.credits.md
-1.introduction/
-  1.what-is-viber3d.md
-  2.why-use-viber3d.md
-3.development/
-  1.running-dev-server.md
-  2.production-build.md
-  3.cursor-rules.md
 4.core-concepts/
   1.ecs-overview.md
   2.entities.md
   3.traits.md
   4.systems.md
   5.components.md
-  6.koota-ecs.md
+  6.actions.md
+  7.advanced.md
+5.addons/
+  1.physics.md
+  2.batch-mesh.md
 
 ================================================================
 Files
 ================================================================
-
-================
-File: 1.getting-started/2.installation.md
-================
----
-title: Installation
-description: Get started with Viber3D game starter kit.
-navigation.icon: i-lucide-download
----
-
-## Requirements
-
-Before installing Viber3D, make sure you have:
-
-- Node.js 16.x or later
-- A modern web browser with WebGL support
-- npm, yarn, or pnpm package manager
-
-## Installation
-
-Run the script to create a new project:
-
-```bash [Terminal]
-npx viber3d@latest init
-```
-
-::video{src="https://a.storyblok.com/f/316774/x/0c8b8d92f8/install_viber_3d_720.mp4?cv=1741718543080" poster="" controls}
-::
-
-## Next Steps
-
-Now that you have Viber3D installed, you can:
-
-1. Check out the [Usage Guide](/getting-started/usage) to learn the basics
-2. Explore the [Core Concepts](/core-concepts/ecs-overview) to understand the engine's architecture
-3. Browse the [Systems](/core-concepts/systems) documentation to learn about specific features
-4. Join our [GitHub Discussions](https://github.com/instructa/viber3d/discussions) for community support
-
-================
-File: 1.getting-started/3.project-structure.md
-================
----
-title: Project Structure
-description: Understanding the Viber3D project structure
-navigation.icon: i-lucide-folder-tree
----
-
-# Project Structure
-
-Below is an example project structure for a **Viber3D** game. Your actual folder names may differ, but these are the typical directories and files you'll see.
-
-```bash
-viber3d/
-├── src
-│   ├── assets/                 # 3D models, textures, images
-│   ├── components/             # React components for rendering 3D objects/UI
-│   ├── systems/                # ECS Systems for game logic updates
-│   ├── traits/                 # ECS Traits (components) describing entity data
-│   ├── utils/                  # Utility functions (math, sorting, spatial hashing)
-│   ├── actions.ts              # Central actions to spawn or modify entities
-│   ├── app.tsx                 # Main React component (root of your 3D scene)
-│   ├── gameloop.ts             # Main ECS update loop (formerly called frameloop)
-│   ├── index.css               # Global CSS or Tailwind CSS (if used)
-│   ├── main.tsx                # React app root, renders <App />
-│   ├── startup.tsx             # Startup logic (initial spawns, intervals)
-│   └── world.ts                # Creates the ECS world with default traits
-├── index.html                  # Basic HTML page with root div
-├── package.json                # Project dependencies and scripts
-└── tsconfig.json               # TypeScript configuration
-```
-
-## Key Directories
-
-**`/src/assets`**  
-Contains static assets such as textures, images, 3D models (`.glb` or `.gltf`), or audio files.
-
-**`/src/components`**  
-React components that render your entities or UI elements. For example:
-- `player-renderer.tsx`  
-- `enemy-renderer.tsx`  
-- `score-tracker.tsx`  
-- `postprocessing.tsx`  
-
-**`/src/systems`**  
-ECS Systems that update game logic every frame. Examples:
-- `move-entities.ts`
-- `camera-follow-player.ts`
-- `handle-shooting.ts`
-- `update-bullet-collisions.ts`
-
-**`/src/traits`**  
-Traits (a.k.a. ECS components) that store data about your entities, such as:
-- `is-player.ts`
-- `health.ts`
-- `movement.ts`
-- `bullet.ts`
-- `spatial-hash-map.ts`
-
-**`/src/utils`**  
-Helper functions or classes, e.g.:
-- `spatial-hash.ts`
-- `sort-entities-by-distance.ts`
-- `between.ts`
-
-## Key Files
-
-**`actions.ts`**  
-Central location for spawning or modifying entities (e.g. `spawnPlayer`, `spawnBullet`).
-
-**`app.tsx`**  
-Your main game component, often where you set up the Three.js canvas (`<Canvas>` from React Three Fiber) and add your top-level components like `<CameraRenderer>`, `<PlayerRenderer>`, etc.
-
-**`gameloop.ts`**  
-The main ECS update loop that orchestrates all the systems every frame.  
-_(If you see `frameloop.ts` in older examples, rename it to `gameloop.ts` to match these docs.)_
-
-**`startup.tsx`**  
-Initial spawns, intervals, or timed events (like adding more enemies every few seconds).  
-
-**`world.ts`**  
-Creates the ECS world (from `koota` or your chosen ECS library), defines default traits (`Time`, `SpatialHashMap`, etc.).
-
-================
-File: 1.getting-started/4.usage.md
-================
----
-title: Usage
-description: Learn the basics of creating games with Viber3D.
-navigation.icon: i-lucide-sliders
----
-
-This guide will walk you through basic concepts of creating games with **Viber3D**. We'll cover how to set up entities, systems, traits, and React components for rendering.
-
-## Basic Concepts
-
-### ECS Overview
-
-Viber3D uses an ECS approach (via [koota](https://www.npmjs.com/package/koota)), where each **entity** has one or more **traits**, and **systems** update the entities each frame. This provides a flexible, modular way to build complex game logic.
-
-### Entities & Traits
-
-Entities are created by calling `world.spawn(...)` with the traits you want. Traits hold data. For example:
-
-```ts
-// trait
-export const Health = trait({ amount: 100 })
-
-// spawn entity
-const player = world.spawn(Health({ amount: 100 }))
-```
-
-### Systems
-
-Systems operate every frame, processing entities that have certain traits. For example:
-
-```ts
-function movementSystem(world: World) {
-  const entities = world.query(Movement, Transform)
-  entities.updateEach(([movement, transform]) => {
-    // update transform based on velocity
-  })
-}
-```
-
-### Rendering with React
-
-You can create React components that query the ECS world or a specific entity's trait and then render a Three.js mesh:
-
-```tsx
-function PlayerRenderer() {
-  const player = useQueryFirst(IsPlayer, Transform)
-  if (!player) return null
-  return <HifiPlayerView entity={player} />
-}
-```
-
-## Putting It All Together
-
-Here's a simplified flow:
-
-1. **Create a world**: `const world = createWorld(Time, SpatialHashMap)`.
-2. **Spawn initial entities** in `startup.tsx` (e.g., a player, some enemies).
-3. **Set up systems** in `gameloop.ts` (e.g., inputSystem, movementSystem, collisionSystem).
-4. **Create React components** in `app.tsx` that query the ECS and render objects.
-5. **Run your game** with `npm run dev` (or similar).
-
-## Example
-
-```tsx
-// main.tsx
-import ReactDOM from 'react-dom/client'
-import { App } from './app'
-import { WorldProvider } from 'koota/react'
-import { world } from './world'
-import './index.css'
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <WorldProvider world={world}>
-      <App />
-    </WorldProvider>
-  </React.StrictMode>
-)
-```
-
-**`app.tsx`**:
-
-```tsx
-export function App() {
-  return (
-    <>
-      <Canvas>
-        {/* Any 3D elements like lights, or your ECS-based components */}
-        <PlayerRenderer />
-        <EnemyRenderer />
-        {/* ... */}
-      </Canvas>
-    </>
-  )
-}
-```
-
-**`gameloop.ts`**:
-
-```ts
-import { useFrame } from '@react-three/fiber'
-import { useWorld } from 'koota/react'
-import { updateTime } from './systems/update-time'
-import { movementSystem } from './systems/move-entities'
-import { collisionSystem } from './systems/update-bullet-collisions'
-// etc.
-
-export function GameLoop() {
-  const world = useWorld()
-
-  useFrame(() => {
-    updateTime(world)
-    movementSystem(world)
-    collisionSystem(world)
-    // ...
-  })
-
-  return null
-}
-```
-
-**Next Steps**:
-1. Dive into [Core Concepts](/core-concepts/ecs-overview) for a deeper understanding of ECS, traits, and systems.
-2. Look at [Systems](/core-concepts/systems) docs to learn how to handle input, physics, collisions, and more.
-3. Join our community on [GitHub Discussions](https://github.com/instructa/viber3d/discussions).
-
-================
-File: 1.getting-started/5.demo.md
-================
----
-title: Demo
-description: Experience Viber3D in action with our live demo
-navigation.icon: i-lucide-rocket
----
-
-# Viber3D Demo
-
-Experience Viber3D in action with our interactive demo. This showcase demonstrates the capabilities and features of the Viber3D framework in a real-world application.
-
-## Live Demo
-
-Visit our live demo at: [viber3d-spacewars.kevinkern.dev](https://viber3d-spacewars.kevinkern.dev/)
-
-## Demo Features
-
-The demo showcases several key features of Viber3D:
-
-::card-group
-
-::card
----
-title: 3D Rendering
-icon: i-lucide-rocket
----
-See the high-performance 3D rendering capabilities with dynamic lighting and effects
-::
-
-::card
----
-title: Physics Engine
-icon: i-lucide-atom
----
-Experience realistic physics interactions between game objects
-::
-
-::card
----
-title: Input Controls
-icon: i-lucide-gamepad
----
-Test the responsive input system with keyboard and mouse controls
-::
-
-::card
----
-title: Game Systems
-icon: i-lucide-cog
----
-Observe the Entity Component System in action with various game mechanics
-::
-
-::
-
-## How to Use the Demo
-
-1. **Navigate** to [viber3d-spacewars.kevinkern.dev](https://viber3d-spacewars.kevinkern.dev/)
-2. **Explore** the 3D environment and interact with objects
-3. **Test** different features and capabilities of the engine
-4. **Observe** how various systems work together to create a cohesive experience
-
-## Learning from the Demo
-
-The demo serves as both a showcase and a learning tool. As you interact with it, consider:
-
-- How different components interact with each other
-- How the physics system handles collisions and movement
-- How the rendering pipeline creates visual effects
-- How user input is translated into in-game actions
-
-## Source Code
-
-Interested in how the demo was built? The complete source code is available in the Viber3D repository. You can use it as a reference for building your own games and applications with Viber3D.
-
-## Next Steps
-
-After exploring the demo, you might want to:
-
-- Review the [Project Structure](/getting-started/project-structure) to understand how Viber3D projects are organized
-- Dive into the [Core Concepts](/core-concepts/ecs-overview) to learn more about the underlying architecture
-- Start building your own game with the knowledge you've gained
-
-================
-File: 1.getting-started/6.credits.md
-================
----
-title: Credits
-description: Special thanks to the individuals and projects that made Viber3D possible
-navigation.icon: i-lucide-star
----
-
-# Credits & Acknowledgments
-
-Viber3D was created by [Kevin Kern](https://x.com/kregenrek) and is a project by [Instructa.ai](https://www.instructa.ai/).
-
-Viber3D stands on the shoulders of giants. This project wouldn't be possible without the contributions of many talented individuals and the amazing open-source libraries they've created.
-
-## Special Thanks
-
-### Koota ECS
-
-This kit is heavily inspired by and uses a lot of concepts from [Koota](https://github.com/krispya/koota), an elegant Entity Component System for JavaScript and TypeScript. Koota provides the foundation for our game architecture, enabling flexible and performant game development.
-
-Special thanks and credits to:
-
-- **[Krispya](https://github.com/krispya)** - Creator of Koota
-- **[Brian](https://github.com/Ctrlmonster)** - Contributor and supporter
-
-### Three.js
-
-At the core of our 3D rendering capabilities is [Three.js](https://threejs.org/), a powerful JavaScript 3D library that makes WebGL accessible and intuitive. We're deeply grateful to:
-
-- **[Ricardo Cabello (Mr.doob)](https://github.com/mrdoob)** - Creator and maintainer of Three.js
-- **The Three.js core team** - For their ongoing development and maintenance
-- **The Three.js community** - For their extensive examples, documentation, and support
-
-Three.js has revolutionized 3D on the web and made projects like Viber3D possible.
-
-### React Three Fiber
-
-Viber3D leverages the power of [React Three Fiber](https://github.com/pmndrs/react-three-fiber), a React renderer for Three.js. We're grateful to the entire Poimandres collective for their incredible work on:
-
-- React Three Fiber
-- Drei
-- Zustand
-- and other related libraries
-
-### Nuxt & UnJS
-
-Our documentation system and tooling are built on the excellent work of:
-
-- **[The Nuxt Team](https://nuxt.com/)** - For their innovative approach to web development and the Nuxt Content module that powers our documentation
-- **[The UnJS Team](https://unjs.io/)** - For their ecosystem of high-quality JavaScript tools that enable modern development workflows
-
-Key UnJS libraries we use include:
-- **Nitro** - For server functionality
-- **Unimport** - For auto-imports
-- **Unbuild** - For building packages
-- **and many more** - The entire UnJS ecosystem has been invaluable
-
-## Additional Libraries
-
-Viber3D also benefits from many other open-source projects, including:
-
-- **TypeScript** - For type safety and developer experience
-- **Vite** - For fast, modern development tooling
-- **TailwindCSS** - For utility-first styling
-
-## Community
-
-Finally, we'd like to thank the growing community of Viber3D users and contributors who provide feedback, report issues, and help improve the project.
-
----
-
-*If you've contributed to Viber3D and aren't listed here, please let us know so we can properly acknowledge your work!*
-
-================
-File: 1.introduction/1.what-is-viber3d.md
-================
-## Key Features
-
-Viber3D leverages these key libraries and concepts:
-
-1. **React**: A popular JavaScript library for building user interfaces.
-2. **React Three Fiber**: React renderer for Three.js, making 3D in React a breeze.
-3. **koota**: A small, ECS-like library for game state management (entities, traits, systems).
-4. **Tailwind CSS**: A utility-first CSS framework for UI styling.
-
-================
-File: 1.introduction/2.why-use-viber3d.md
-================
-- **Quick Setup**: Quickly set up a 3D environment without the hassle of configuration.
-- **ECS Architecture**: Start coding with a flexible ECS approach for your game logic.
-- **React Integration**: Enjoy the expressiveness of React and react-three-fiber with minimal boilerplate.
-- **Scope Flexibility**: Ideal for making small to medium-scale 3D shooter or exploration games.
-
-## Perfect For
-
-- Game developers looking to build browser-based 3D games
-- React developers wanting to explore 3D game development
-- Prototyping game ideas quickly
-- Learning ECS architecture in a practical context
-
-================
-File: 3.development/1.running-dev-server.md
-================
----
-title: Development Server
-description: This guide explains how to run and work with the Viber3D development server.
----
-
-## Starting the Development Server
-
-To start the development server with hot reload:
-
-```bash
-npm run dev
-```
-
-This will:
-- Start a local development server (by default at [http://localhost:5173](http://localhost:5173))
-- Enable hot module replacement (HMR)
-- Provide real-time error feedback
-
-## Accessing Your Game
-
-Once the server is running:
-- Open your browser to [http://localhost:5173](http://localhost:5173)
-- You should see your 3D scene
-- Any code changes automatically refresh (HMR)
-
-## Development Features
-
-- **Hot Module Replacement (HMR)**  
-  Changes to React components update in real-time.
-
-- **Error Overlay**  
-  Compilation and runtime errors are shown in the browser.
-
-- **Dev Tools**  
-  Source maps, React Developer Tools, performance profiling.
-
-## Troubleshooting
-
-If you encounter issues:
-1. Check terminal for error messages
-2. Verify port availability
-3. Ensure all dependencies are installed
-4. Clear browser cache if needed
-
-================
-File: 3.development/2.production-build.md
-================
----
-title: Production Build
-description: Learn how to create optimized production builds for your Viber3D game.
----
-
-## Creating a Production Build
-
-```bash
-npm run build
-```
-
-This command will:
-- Compile your TypeScript code
-- Bundle all assets
-- Optimize for production
-- Output static files in `dist/`
-
-## Testing the Production Build
-
-```bash
-npm run preview
-```
-
-This serves your built files at [http://localhost:4173](http://localhost:4173) by default.
-
-## Optimizations
-
-- **Code Minification**  
-  JavaScript & CSS minified, dead code elimination, tree-shaking.
-
-- **Asset Optimization**  
-  Image compression, font subsetting, static asset fingerprinting.
-
-- **Performance**  
-  Code splitting, lazy loading components, caching headers.
-
-## Deployment
-
-After building:
-- The `dist/` folder contains everything needed
-- Deploy to any static hosting service (Netlify, Vercel, etc.)
-- No server runtime required
-
-================
-File: 3.development/3.cursor-rules.md
-================
----
-title: Cursor Rules
-description: A detailed explanation of Cursor Rules and .mdc files
----
-
-[**Cursor Rules**](https://www.instructa.ai/en/blog/how-to-use-cursor-rules-in-version-0-45) are a feature of [Cursor AI](https://cursor.com) that let you define project-specific guidelines for code generation. By storing these guidelines in `.mdc` (Markdown Cursor) files, you can ensure the AI consistently follows your coding styles, ECS patterns, and architecture rules—particularly useful in Viber3D or any ECS-based React project.
-
-## Introduction
-
-When building a 3D game or any application, it's crucial to maintain consistent styles and best practices. **Cursor Rules** provide a centralized way to instruct the AI about your project's needs:
-
-- ECS architecture guidelines  
-- React Three Fiber best practices  
-- Trait naming conventions  
-- System structure (pure functions, minimal side effects)  
-- Directory layouts (e.g., `src/components`, `src/systems`, etc.)  
-
-This is especially handy if multiple developers or AI instances are collaborating on the same codebase.
-
-## What Are Cursor Rules?
-
-Cursor Rules come in two varieties:
-
-1. **Global Rules**: Applied to all projects on your machine via Cursor's global settings.  
-2. **Project Rules**: Kept in `.cursor/rules/*.mdc` within your project. These are more specific to your current codebase or framework (e.g. "Use ECS with Koota," "Use `useTraitEffect` for trait-based triggers," etc.).
-
-**.mdc** stands for **Markdown Cursor**, indicating these rules are written as Markdown with some extra front matter for metadata (like `description:` and `globs:`).
-
-### Example MDC File
-
-```md
----
-description: React Component Rules
-globs: *.tsx
----
-
-# React Component Guidelines
-- Use functional components
-- Implement ECS data flow with Koota (no direct game logic in components)
-- Keep all game logic in systems, not `useFrame`
-```
-
-## Project Rules and .mdc Files
-
-In your **Viber3D** game, you'll see a `.cursor/rules` directory containing `.mdc` files, for example:
-
-```bash
-.cursor/
-└── rules/
-    ├── base.mdc
-    ├── components.mdc
-    ├── systems.mdc
-    ├── traits.mdc
-    └── utils.mdc
-```
-
-Each file has:
-
-- **Front matter**: fields like `description` and `globs`.  
-- **Markdown content**: sets out the code style, architecture, or other guidelines.  
-
-When Cursor AI processes your code, if your open file matches a `.mdc` rule's `globs` (e.g. `*.ts`, `src/components/**/*.tsx`), it automatically includes that rule's content into the conversation context. As a result, the AI's suggestions will better align with your instructions.
-
-### Typical Fields
-
-- **`description:`** Summarizes what the rule is about.  
-- **`globs:`** Indicates which files or directories it applies to (`src/components/**/*.tsx`, `*.md`, etc.).  
-- **`alwaysApply:`** (Optional) If set true, the rule is always used.  
-- Then a Markdown body explaining your guidelines, best practices, do's/don'ts, or code examples.
-
-## How They're Used in Viber3D
-
-In a typical Viber3D project:
-
-1. **ECS Systems** need certain constraints: pure functions, minimal side effects, delta-based movement, etc.  
-2. **React Components** should avoid game logic (only visuals).  
-3. **Traits** should remain small and data-focused.  
-4. **Directory Structure** might follow the pattern `src/{components, systems, traits, utils}`.  
-
-All these guidelines can go into `.mdc` files. For instance:
-
-- **`base.mdc`** might state overarching ECS + R3F principles.  
-- **`components.mdc`** can specify that "Components must not contain ECS logic" and "Use `useTraitEffect` only for visual triggers."  
-- **`systems.mdc`** can define how you structure your system files (`export const functionName = (world: World) => { ... }`).  
-- **`traits.mdc`** can detail how to define `trait({ ... })` objects for data.  
-- **`utils.mdc`** might outline your best practices for math or utility modules.
-
-During development, whenever you open or modify a file that matches the rule's glob pattern, Cursor AI automatically includes those rules. As you ask for code suggestions or expansions, the AI will do so in alignment with your `.mdc` definitions.
-
-## Creating or Editing Cursor Rules
-
-1. **Open the Command Palette** (`Cmd+Shift+P` on macOS) and choose "New Cursor Rule."  
-2. **Name your file** and specify the `globs`.  
-3. **Write** the guidelines in the Markdown body. Provide bullet points, code samples, or detailed instructions.  
-4. **Commit** it to version control so your team shares the same rules.  
-
-You can also edit existing `.mdc` files in `.cursor/rules` at any time.
-
-## Benefits of Cursor Rules
-
-1. **Consistency**: The AI's code suggestions remain consistent with your ECS architecture, naming conventions, or React style.  
-2. **Productivity**: Faster code generation that needs fewer manual fixes.  
-3. **Team Alignment**: Everyone on the project sees the same `.mdc` rules, ensuring uniform coding standards.  
-4. **Reduced Errors**: By embedding best practices (e.g. "do not mix ECS logic in React components"), you reduce logic bugs.  
-
-## Example Use Cases
-
-- **Framework-Specific**: Mandating SolidJS or React patterns for `*.tsx`.  
-- **Auto-Generated Files**: Telling Cursor not to modify `.proto` or `.glb` files.  
-- **Folder-Specific**: For `src/systems/**/*.ts`, always mention a "pure system, no side effects" approach.  
-- **UI Patterns**: Ensuring usage of Tailwind classes for styling, or restricting inline styles.
-
-## Best Practices
-
-- Keep rules **clear** and **concise**.  
-- Provide **code examples** in the markdown.  
-- Use **`globs`** to apply the rule only where relevant.  
-- Keep them up to date as your team's conventions evolve.  
-
-## Conclusion
-
-Cursor Rules—and the `.mdc` files that store them—offer a powerful way to guide the Cursor AI so it consistently follows your Viber3D game's coding patterns. Whether you're enforcing ECS best practices, React Three Fiber do's and don'ts, or file-based architecture rules, well-crafted `.mdc` rules can greatly improve your development flow.
 
 ================
 File: 4.core-concepts/1.ecs-overview.md
@@ -737,156 +72,177 @@ description: Viber3D uses an Entity Component System (ECS) architecture via the 
 
 ## What is ECS?
 
-ECS is a data-driven pattern where:
-- **Entities** are unique identifiers that represent "things" in your game (players, enemies, bullets)
-- **Traits** (components) hold pure data for those entities
-- **Systems** process matching entities each frame to implement game logic
+ECS stands for **Entity Component System**, a data-driven architecture widely used in games:
+- **Entities** are unique identifiers that represent in-game objects (e.g., players, enemies, bullets).
+- **Traits** (often called components in other ECSs) hold pure data for those entities.
+- **Systems** process matching entities to implement logic and behavior.
+
+Koota is the ECS-based library that Viber3D uses under the hood. It’s optimized for real-time apps and XR experiences.
 
 ## Why ECS?
 
 1. **Flexibility**  
-   Entities can have any combination of traits, making it more flexible than traditional inheritance.
+   Entities can have any combination of traits—much more flexible than rigid inheritance trees.
 
 2. **Performance**  
-   Data-oriented design enables efficient iteration and better cache utilization.
+   ECS focuses on data-oriented design, allowing efficient queries and updates to large numbers of entities.
 
 3. **Maintainability**  
-   Clear separation of data (traits) from logic (systems) makes code easier to understand and modify.
+   By separating data (traits) from logic (systems), your codebase remains organized and easy to reason about.
 
-4. **Composability**
-   New features can be added by creating new traits and systems without modifying existing code.
+4. **Composability**  
+   New features or behaviors can be added by creating new traits and systems without modifying existing code.
 
 ## ECS in Viber3D
 
+Below is a simplified example:
+
 ```ts
-// Define a trait (component)
-export const Position = trait({
-  x: 0, y: 0, z: 0
+import { trait, createWorld } from 'koota'
+
+// 1. Define traits (data)
+export const Position = trait({ x: 0, y: 0, z: 0 })
+export const Health = trait({ amount: 100 })
+
+// 2. Create a world and spawn an entity
+const world = createWorld()
+world.spawn(Position({ x: 10, y: 5 }), Health({ amount: 50 }))
+
+// 3. Query and update entities
+world.query(Position, Health).updateEach(([pos, hp]) => {
+  // game logic that modifies position or health
 })
+```
 
-// Create an entity with traits
-world.spawn(Position, Health({ amount: 100 }))
+## SoA vs. AoS Storage
 
-// Query entities with specific traits
-const movableEntities = useQuery([Position, Velocity]);
+Koota supports two main ways of storing trait data:
 
-// Process entities in a system
-function MovementSystem() {
-  const entities = useQuery([Position, Velocity]);
+- **Schema-based (SoA)**: If you define a trait with an object literal, each property is stored in its own array. Ideal for numeric fields updated frequently (e.g., positions, velocities).
   
-  useFrame(() => {
-    for (const entity of entities) {
-      const position = entity.get(Position);
-      const velocity = entity.get(Velocity);
-      
-      position.x += velocity.x;
-      position.y += velocity.y;
-      position.z += velocity.z;
-    }
-  });
-}
+  ```ts
+  const Position = trait({ x: 0, y: 0, z: 0 })
+  // Internally, x, y, and z each become separate arrays
+  ```
+
+- **Callback-based (AoS)**: If you define a trait with a callback, the entire trait is stored as a single object in an array of structures. Useful when storing complex objects (e.g., `THREE.Mesh`, classes, or vectors).
+
+  ```ts
+  const Mesh = trait(() => new THREE.Mesh())
+  // Each entity that has Mesh gets its own THREE.Mesh() instance
+  ```
+
+## World Traits
+
+In Koota, your `World` can also have traits (sometimes called “singleton” traits). These do **not** appear in standard entity queries but can be accessed with `world.get(...)` and `world.set(...)`. Use them for global data like time, input state, or configuration.
+
+```ts
+import { trait, createWorld } from 'koota'
+
+const Time = trait({ delta: 0, current: 0 })
+const world = createWorld()
+world.add(Time)
+
+// Now we can store time info globally
+world.set(Time, (prev) => ({
+  current: performance.now(),
+  delta: performance.now() - prev.current
+}))
 ```
 
 ## Common Patterns
 
-### Adding Features to Entities
-
-To add new features to game objects, create new traits instead of modifying existing ones:
-
-```ts
-// Adding health system
-entity.set(Health, { current: 100, max: 100 });
-
-// Adding weapon system
-entity.set(Weapon, { damage: 10, fireRate: 0.5 });
-```
-
-### Querying Entities
-
-```ts
-// Find all entities with both Health and Transform
-const entities = useQuery([Health, Transform]);
-
-// Find first player entity
-const player = useQueryFirst(IsPlayer);
-```
-
-## Best Practices
-
-- **Keep traits simple**: Traits should only contain data, no logic
-- **Write single-purpose systems**: Each system should focus on one aspect of game logic
-- **Use queries efficiently**: Only query for the traits you need
-- **Composition over inheritance**: Build complex entities by combining simple traits
-- **Clean up resources**: Make sure to handle entity removal properly
+- **Composition over inheritance**: Build complex entities by combining small, focused traits.
+- **Use queries efficiently**: Only query for traits you need.
+- **Clean up**: Remove or destroy entities when they’re no longer needed (e.g., after a system determines they’re off-screen or at zero health).
 
 ## Next Steps
 
-- Explore [Entities](/core-concepts/entities) to see how to spawn or remove them
-- Learn about [Traits](/core-concepts/traits) in detail
-- Check out [Systems](/core-concepts/systems) for system design and implementation
+- Dive into [Entities](./2.entities.md) to learn how to spawn, remove, and manage them.
+- Check out [Traits](./3.traits.md) to see how to define data in your ECS world.
+- See [Systems](./4.systems.md) for writing game logic.
+- Explore [Components](./5.components.md) for React/Three.js rendering using ECS data.
+- Learn about [Actions](./6.actions.md) for centralizing world modifications.
 
 ================
 File: 4.core-concepts/2.entities.md
 ================
 ---
-title: Working with Entities
+title: Entities
 description: Entities are the building blocks of your Viber3D game. They can have any number of traits that define their data/behavior.
 ---
 
 ## Creating Entities
 
 ```ts
-import { World } from 'koota'
-import { Transform, Health, IsPlayer } from '../traits'
+import { World, trait } from 'koota'
+import * as THREE from 'three'
 
-// Create a player entity
-world.spawn(
+// Example traits
+const Transform = trait({
+  position: () => new THREE.Vector3(),
+  rotation: () => new THREE.Euler()
+})
+
+const Health = trait({ amount: 100 })
+const IsPlayer = trait() // tag trait, no data
+
+// Create a world
+const world = new World()
+
+// Spawn a player entity
+const player = world.spawn(
   Transform(),
   Health({ amount: 100 }),
   IsPlayer()
 )
 ```
 
-## Entity Actions
+### Entity Lifecycle
 
-Centralize creation in "action" functions:
+1. **Creation** via `world.spawn(...)`
+2. **Updates** (via systems or direct calls to `entity.set(...)`)
+3. **Removal** when no longer needed (e.g., `entity.destroy()` or queries that remove entities conditionally)
 
-```ts
-export function spawnPlayer(world: World, position: THREE.Vector3) {
-  return world.spawn(
-    Transform({ position }),
-    Health({ amount: 100 }),
-    IsPlayer()
-  )
-}
-```
+---
 
 ## Querying Entities
 
+Koota’s query system lets you retrieve entities that have certain traits:
+
 ```ts
-// Single entity
+// Single entity (first match)
 const player = world.queryFirst(IsPlayer)
 
 // Multiple entities
 const enemies = world.query(IsEnemy, Health)
+```
 
-// Filtering
+### Filtering
+
+Use standard array filters or `.filter()` on the query results:
+
+```ts
 const lowHealthEnemies = world
   .query(IsEnemy, Health)
   .filter(([_, health]) => health.amount < 50)
 ```
 
-## Updating Entities
+### Update in Bulk
+
+`updateEach()` is a convenient way to iterate and immediately update trait data:
 
 ```ts
 function damageSystem(world: World) {
   world.query(Health).updateEach(([health]) => {
     if (health.amount <= 0) {
-      // handle death
+      // handle death (destroy entity, spawn effect, etc.)
     }
   })
 }
 ```
+
+---
 
 ## Removing Entities
 
@@ -897,15 +253,100 @@ world.remove(entity)
 // remove in a query
 world.query(Health).removeIf(([health]) => health.amount <= 0)
 
-// remove all of a trait
-world.removeAll(IsTemporary)
+// remove a single entity directly
+entity.destroy()
 ```
 
-## Entity Lifecycle
+---
 
-1. **Creation**  
-2. **Updates** (systems run)  
-3. **Cleanup** (destroyed when not needed)
+## Relationships
+
+Koota supports **relationships** between entities with the `relation()` API. This is an alternative to storing entity references directly inside a normal trait. Relationships are powerful for parent-child hierarchies, inventory systems, or targeting logic.
+
+```ts
+import { relation } from 'koota'
+
+const ChildOf = relation()
+const parent = world.spawn()
+const child = world.spawn(ChildOf(parent))
+
+// Query all children of `parent`
+const children = world.query(ChildOf(parent))
+```
+
+### With Data
+
+Relationships can carry extra fields:
+
+```ts
+const Contains = relation({ store: { amount: 0 } })
+
+const inventory = world.spawn()
+const gold = world.spawn()
+inventory.add(Contains(gold))
+inventory.set(Contains(gold), { amount: 10 })
+```
+
+### Exclusive & Auto-Remove
+
+```ts
+const Targeting = relation({ exclusive: true })
+// ensures only one target can be assigned at once
+
+const ChildAutoRemove = relation({ autoRemoveTarget: true })
+// destroying the parent will also destroy the child
+```
+
+### Querying Relationships
+
+```ts
+import { Wildcard } from 'koota'
+
+// Query all entities containing `gold`
+const containers = world.query(Contains(gold))
+
+// Query all relationships that target anything (`'*'`)
+const anything = world.query(Contains('*'))
+
+// Inverted or wildcard queries
+const allRelatedToGold = world.query(Wildcard(gold))
+```
+
+---
+
+## Advanced Query Modifiers
+
+Koota provides several modifiers for advanced use cases:
+
+- **Not(...)**: Excludes entities that have certain traits.
+- **Or(...)**: Finds entities matching any of the listed traits (logical OR).
+- **Added/Removed/Changed**: Track recent trait additions, removals, or changes since last query.
+
+Example:
+
+```ts
+import { Not, Or, createAdded, createRemoved, createChanged } from 'koota'
+
+// Exclude trait
+const staticEntities = world.query(Transform, Not(Velocity))
+
+// Logical OR
+const movingOrVisible = world.query(Or(Velocity, Renderable))
+
+// Track newly added
+const Added = createAdded()
+const newPositions = world.query(Added(Position))
+
+// Track removed
+const Removed = createRemoved()
+const stoppedEntities = world.query(Removed(Velocity))
+
+// Track changed
+const Changed = createChanged()
+const movedEntities = world.query(Changed(Position))
+```
+
+---
 
 ## Common Patterns
 
@@ -923,76 +364,149 @@ function spawnEnemy(world: World) {
 }
 ```
 
-### Entity References
+### Direct References vs. Relationships
 
+You can store entity references directly in a trait:
 ```ts
+import { trait } from 'koota'
+
 const TargetRef = trait({
   entity: null as Entity | null
 })
 
-// Link one entity to another
 world.spawn(IsProjectile(), TargetRef({ entity: enemy }))
 ```
+
+However, for more complex parent-child or inventory logic, [Relationships](#relationships) may be a better fit.
+
+---
+
+## Next Steps
+
+- Learn more about [Traits](./3.traits.md) to define entity data.
+- Continue to [Systems](./4.systems.md) for processing queries each frame.
+- Check out [Actions](./6.actions.md) to see how to centralize entity creation and destruction.
 
 ================
 File: 4.core-concepts/3.traits.md
 ================
 ---
-title: Understanding Traits
-description: Traits (or components) store your entity's data. Each trait is a small piece of state.
+title: Traits
+description: Traits store your entity’s data. Each trait is a small piece of state in an ECS architecture.
 ---
 
 ## Defining Traits
 
+In Koota, traits (analogous to "components") can be defined using either:
+
+1. **Schema-based (SoA)** — for numeric or simpler data fields:
+   ```ts
+   import { trait } from 'koota'
+
+   export const Health = trait({
+     amount: 100,
+     max: 100
+   })
+   ```
+   Each property is stored in its own array internally for performance.
+
+2. **Callback-based (AoS)** — for complex objects or classes:
+   ```ts
+   export const Transform = trait(() => ({
+     position: new THREE.Vector3(),
+     rotation: new THREE.Euler()
+   }))
+   ```
+   Each entity’s instance is stored in a single array of objects.
+
+### Tag Traits
+Use empty traits (no data) for simple tagging:
+
 ```ts
-import { trait } from 'koota'
-import * as THREE from 'three'
-
-// Simple trait
-export const Health = trait({
-  amount: 100
-})
-
-// Complex trait with Vector3
-export const Transform = trait({
-  position: () => new THREE.Vector3(),
-  rotation: () => new THREE.Euler(),
-  scale: () => new THREE.Vector3(1, 1, 1)
-})
-
-// Tag trait (no data)
-export const IsPlayer = trait()
+export const IsPlayer = trait() 
+export const IsEnemy = trait()
 ```
 
-## Trait Types
+---
 
-1. **Data Traits** — store fields like health, velocity, etc.  
-2. **Tag Traits** — mark an entity for special processing (no data).  
-3. **Reference Traits** — store links between entities.
+## Initializing Trait Data
+
+When adding a trait to an entity, you can override defaults:
+
+```ts
+entity.add(Health()) // uses defaults
+entity.add(Health({ amount: 50 })) // custom amount
+```
+
+For callback-based traits:
+
+```ts
+const Model = trait(() => new THREE.Mesh())
+
+const entity = world.spawn(Model()) // Each entity gets its own mesh instance
+```
+
+---
+
+## Typing Traits
+
+If your trait is more complex, you can specify the exact TypeScript interface. For schema-based traits:
+
+```ts
+interface AttackData {
+  continueCombo: boolean | null
+  currentStageIndex: number | null
+  stages: Array<AttackStage> | null
+  startedAt: number | null
+}
+
+// Use Pick to avoid TS quirks with interfaces
+export const Attacker = trait<Pick<AttackData, keyof AttackData>>({
+  continueCombo: null,
+  currentStageIndex: null,
+  stages: null,
+  startedAt: null,
+})
+```
+
+---
 
 ## Working with Traits
 
 ```ts
-// initialization
-world.spawn(Health()) // uses defaults
-world.spawn(Health({ amount: 50 })) // custom
+// Retrieve a trait snapshot
+const health = entity.get(Health)
+health.amount -= 10
+
+// Or update with set, which triggers events/changes
+entity.set(Health, (prev) => ({
+  ...prev,
+  amount: prev.amount - 10
+}))
 ```
 
-```tsx
-// in a React component
-function HealthBar({ entity }: { entity: Entity }) {
-  const health = useTraitValue(entity, Health)
-  return <div>{health.amount}</div>
+---
+
+## Adding and Removing Traits
+
+```ts
+// Add trait
+entity.add(Health({ amount: 100 }))
+
+// Remove trait
+entity.remove(Health)
+
+// Check if a trait is present
+if (entity.has(Health)) {
+  // ...
 }
 ```
 
-## Best Practices
-
-- Keep each trait focused on a single concept
-- Avoid methods in traits; use systems to do logic
-- Provide sensible default values
+---
 
 ## Debugging Traits
+
+You can create special traits for debugging:
 
 ```ts
 export const Debug = trait({
@@ -1000,536 +514,1184 @@ export const Debug = trait({
   enabled: false
 })
 
-// during development
-entity.add(Debug({ label: 'Player', enabled: true }))
+// Mark an entity for debug
+entity.add(Debug({ label: 'Player1', enabled: true }))
 ```
+
+Then your debugging or logging systems can query these and provide extra info.
+
+---
+
+## SoA vs AoS
+
+- **Structure of Arrays (SoA)** is best for performance when performing the same operation on large sets of numeric data.
+- **Array of Structures (AoS)** is more convenient when storing class instances, references, or arbitrary objects like `THREE.Vector3`.
+
+Use whichever style suits your data and performance needs.
+
+---
+
+## Next Steps
+
+- Go to [Entities](./2.entities.md) to see how to spawn and manage them.
+- Learn about [Systems](./4.systems.md) for processing trait data.
+- Check out [Actions](./6.actions.md) for centralized trait updates.
 
 ================
 File: 4.core-concepts/4.systems.md
 ================
 ---
-title: Systems in Viber3D
-description: Systems are functions that process entities each frame (or on events), updating trait data.
+title: Systems
+description: Systems process entities each frame (or on demand), updating trait data and implementing game logic.
 ---
 
 ## Introduction
 
-Systems are the core logic processors in Viber3D's ECS architecture. They operate on entities with specific trait combinations, handling everything from movement and physics to game logic and AI behaviors.
-
-## Creating Systems
-
-A system is typically a pure function that takes a `World` instance and processes entities with specific trait combinations:
+In ECS, **Systems** are the logic executors. They run over queries of entities that have the required traits, performing operations such as movement, AI, physics, or effects.
 
 ```ts
+import { World } from 'koota'
+import { Transform, Movement } from '../traits'
+
 function movementSystem(world: World) {
-  const { delta } = world.get(Time)!
+  // Example: let's assume we have a Time trait
+  const time = world.get(Time)
+  if (!time) return
+
+  const { delta } = time
   world.query(Transform, Movement).updateEach(([transform, movement]) => {
     transform.position.add(movement.velocity.clone().multiplyScalar(delta))
   })
 }
 ```
 
-## System Categories
+---
 
-### Core Systems
-1. **Time System**
-   - Updates `Time` trait each frame (delta time, elapsed time, etc.)
-   - Essential for frame-rate independent updates
-2. **Input System**
-   - Processes keyboard/mouse state
-   - Updates an `Input` trait for other systems to consume
+## Core Patterns
 
-### Physics Systems
-1. **Movement**
-   ```ts
-   export function moveEntities(world: World) {
-     const { delta } = world.get(Time)!
-     world.query(Transform, Movement).updateEach(([transform, movement]) => {
-       transform.position.add(movement.velocity.clone().multiplyScalar(delta))
-     })
-   }
-   ```
-2. **Collision Detection**
-   ```ts
-   export function collideBullets(world: World) {
-     // find bullets, check collisions, apply damage, spawn explosions, etc.
-   }
-   ```
+### Update Systems
 
-### Game Logic Systems
-- **AI Systems** (enemy behavior, pathfinding)
-- **Combat Systems** (damage, health regeneration)
-- **Scoring Systems** (points, achievements)
+Most systems run every frame (or every tick). They typically:
+1. Retrieve relevant data from the world (e.g., `Time`, `Input`).
+2. Query entities matching a specific trait combination.
+3. Update trait data as needed.
 
-### Visual Systems
-While most visual logic lives in React components, some systems bridge game state to rendering:
-- Camera control systems
-- Particle effect systems
-- Animation state systems
+```ts
+function healthRegenSystem(world: World) {
+  const time = world.get(Time)!
+  world.query(Health, Regeneration).updateEach(([health, regen]) => {
+    health.amount = Math.min(health.max, health.amount + regen.rate * time.delta)
+  })
+}
+```
 
-## System Types by Update Pattern
+### Event Systems
 
-1. **Update Systems** (run every frame)
-   ```ts
-   function healthRegenSystem(world: World) {
-     const { delta } = world.get(Time)!
-     world.query(Health, Regeneration).updateEach(([health, regen]) => {
-       health.amount = Math.min(health.max, health.amount + regen.rate * delta)
-     })
-   }
-   ```
-2. **Event Systems** (respond to specific triggers)
-3. **Cleanup Systems** (garbage collection, entity removal)
+Sometimes, you only want to process logic when an event happens. Koota has an event system:
+
+```ts
+world.on('entityDamaged', ({ entity, amount }) => {
+  // maybe spawn a blood effect or play a sound
+})
+```
+
+You can emit events in your code:
+
+```ts
+entity.set(Health, (h) => {
+  const newAmount = Math.max(0, h.amount - damage)
+  world.emit('entityDamaged', { entity, amount: damage })
+  return { ...h, amount: newAmount }
+})
+```
+
+### Cleanup Systems
+
+Systems that remove entities or reset them:
+
+```ts
+function cleanupSystem(world: World) {
+  world.query(Health).removeIf(([health]) => health.amount <= 0)
+}
+```
+
+---
 
 ## System Organization
 
-Systems are typically organized in the `src/systems/` directory, with one system per file. Register them in your game loop:
+Generally, you have a `systems/` directory with one file per system or small system groups. In your main loop (or React’s `useFrame`), you call them in order:
 
 ```ts
-export function GameLoop() {
-  useFrame(() => {
-    // Core systems first
-    timeSystem(world)
-    inputSystem(world)
-    
-    // Game logic
-    movementSystem(world)
-    collisionSystem(world)
-    aiSystem(world)
-    
-    // Cleanup last
-    cleanupSystem(world)
-  })
+export function GameLoop(world: World) {
+  // Possibly in a requestAnimationFrame or React useFrame
+  timeSystem(world)
+  inputSystem(world)
+  movementSystem(world)
+  collisionSystem(world)
+  cleanupSystem(world)
 }
 ```
 
-## Best Practices
+---
 
-1. **Single Responsibility**
-   - Each system should do one thing well
-   - Split complex systems into smaller, focused ones
+## Performance Tips
 
-2. **Performance**
-   - Cache queries when possible
-   - Use appropriate update patterns (not everything needs to run every frame)
-   - Consider system scheduling based on game state
+1. **Cache queries**: Repeatedly calling the same query can be more expensive. If you must query the same traits many times, store the result.
+2. **Use SoA**: For large numeric datasets, prefer schema-based traits for better performance.
+3. **Selective Scheduling**: Not every system needs to run every frame (e.g., AI pathfinding might run less often).
 
-3. **Pure Functions**
-   - Systems should be predictable and testable
-   - Avoid side effects outside of trait updates
-   - Use the event bus for cross-system communication
+---
 
-## Advanced Patterns
+## Change Detection Options
 
-### System Scheduling
+When using `.updateEach()`, you can specify how Koota handles change events:
+
+- `changeDetection: 'never'` — no change events triggered.
+- `changeDetection: 'always'` — changes are always emitted for mutated traits.
+- (default) — triggers changes only for traits or queries specifically tracking them.
+
 ```ts
-const COMBAT_SYSTEMS = [damageSystem, healthRegenSystem]
-const PEACEFUL_SYSTEMS = [movementSystem, aiSystem]
-
-useFrame(() => {
-  const systems = world.get(GameState)!.inCombat 
-    ? COMBAT_SYSTEMS 
-    : PEACEFUL_SYSTEMS
-    
-  systems.forEach(system => system(world))
-})
+world.query(Position, Velocity).updateEach(
+  ([pos, vel]) => {
+    // ...
+  },
+  { changeDetection: 'never' }
+)
 ```
 
-### Event Bus Communication
-```ts
-// Emit events
-world.emit('entityDamaged', { entity, amount })
-
-// Listen in other systems
-world.on('entityDamaged', ({ entity, amount }) => {
-  // Handle damage effects, sounds, etc.
-})
-```
-
-### Debug Systems
-```ts
-function debugSystem(world: World) {
-  if (!DEBUG_MODE) return
-  
-  world.query(Transform, Movement).forEach(([transform, movement]) => {
-    drawDebugVector(transform.position, movement.velocity)
-  })
-}
-```
+---
 
 ## Testing Systems
 
-Systems should be easily testable due to their pure nature:
+Because systems are just functions, you can test them easily:
 
 ```ts
 describe('movementSystem', () => {
   it('updates position based on velocity', () => {
-    const e = world.spawn(Transform(), Movement({ velocity: new Vector3(1, 0, 0) }))
+    const world = createWorld()
+    const ent = world.spawn(Transform(), Movement({ velocity: new Vector3(1, 0, 0) }))
+    world.add(Time({ delta: 1 })) // simulate 1 second
+
     movementSystem(world)
-    expect(e.get(Transform).position.x).toBeGreaterThan(0)
+    expect(ent.get(Transform)!.position.x).toBe(1)
   })
 })
 ```
+
+---
+
+## Next Steps
+
+- Check out [Entities](./2.entities.md) for more on entity life cycles.
+- Learn about [Actions](./6.actions.md) to see how systems integrate with centralized function calls.
+- [Components](./5.components.md) covers how to render ECS data in React + Three.js.
 
 ================
 File: 4.core-concepts/5.components.md
 ================
 ---
-title: React Components in Viber3D
-description: Your Viber3D game typically uses **React** + **React Three Fiber**. Components can query data from the ECS world and render Three.js objects accordingly.
+title: Components
+description: Your Viber3D game typically uses React + React Three Fiber. Components can query data from the ECS world and render Three.js objects accordingly.
 ---
 
-## Basic Structure
+## ECS + React
+
+Koota provides React hooks to connect ECS data (traits) to your components. In Viber3D, you’ll often use **React Three Fiber** (`@react-three/fiber`) for rendering 3D scenes, and these hooks to sync ECS state with visuals.
+
+### Common Hooks
+
+1. **`useQuery`** — returns an array of entities matching certain traits.
+2. **`useQueryFirst`** — returns the first matching entity (or `undefined`).
+3. **`useTrait`** — returns the current value of a given trait on an entity (or `undefined` if missing).
+4. **`useTraitEffect`** — runs a side effect whenever the trait is added, removed, or changed.
+5. **`useWorld`** — returns the current ECS world from context.
+6. **`useActions`** — returns a set of centralized actions for mutating the ECS state.
+
+---
+
+## Example: Rendering Entities
 
 ```tsx
-import { useTraitValue } from 'koota/react'
-import { useFrame } from '@react-three/fiber'
-import { Transform, Model } from '../traits'
+import { useQuery, useTrait } from 'koota/react'
+import { Transform, IsEnemy } from '../traits'
 
-function PlayerModel({ entity }: { entity: Entity }) {
-  const transform = useTraitValue(entity, Transform)
-  // ...
-  return (
-    <group position={transform.position}>
-      <mesh /* ... */ />
-    </group>
-  )
-}
-```
-
-## ECS Hooks
-
-- **`useQuery`**: to list all entities with certain traits  
-- **`useQueryFirst`**: to get the first matching entity  
-- **`useTraitValue`**: to read trait data reactively  
-- **`useTraitEffect`**: run side effects when trait changes
-
-## Component Types
-
-1. **Entity Renderers**  
-   e.g. `BulletRenderer`, `EnemyRenderer`  
-2. **UI Components**  
-   e.g. `ScoreTracker`, `HealthTracker`  
-3. **Effect Components**  
-   e.g. `ExplosionRenderer`, `PostProcessing`
-
-## Performance Optimizations
-
-- Memoize heavy components  
-- Use instancing for large numbers of similar objects  
-- Culling & LOD for distant objects
-
-## Example
-
-```tsx
 function EnemyRenderer() {
+  // get all enemies
   const enemies = useQuery(IsEnemy, Transform)
+  
   return (
     <>
-      {enemies.map(enemy => (
-        <HifiEnemyView key={enemy.id()} entity={enemy} />
+      {enemies.map(entity => (
+        <EnemyView key={entity.id()} entity={entity} />
       ))}
     </>
   )
 }
-```
 
-================
-File: 4.core-concepts/6.koota-ecs.md
-================
----
-title: Koota
-description: Koota is the ECS-based state management library used in Viber3D for efficient game state management.
----
-
-# Koota in Viber3D
-
-Viber3D uses Koota as its Entity Component System (ECS) library. Koota is optimized for real-time applications, games, and XR experiences, making it a perfect fit for Viber3D's performance requirements.
-
-## What is Koota?
-
-Koota is an ECS-based state management library that provides:
-
-- **Efficient data organization** through a Structure of Arrays (SoA) approach
-- **Reactive state management** for React integration
-- **Relationship modeling** between entities
-- **Query-based systems** for processing entities with specific traits
-
-## Core Concepts
-
-### Traits
-
-In Koota, components are called "traits" to avoid confusion with React components. Traits are pure data containers attached to entities.
-
-```js
-import { trait } from 'koota';
-
-// Define traits in your Viber3D game
-const Position = trait({ x: 0, y: 0, z: 0 });
-const Velocity = trait({ x: 0, y: 0, z: 0 });
-const Health = trait({ current: 100, max: 100 });
-
-// Tag traits (no data)
-const IsPlayer = trait();
-const IsEnemy = trait();
-```
-
-### Entities
-
-Entities are lightweight identifiers that gain functionality by having traits attached to them.
-
-```js
-import { useWorld } from 'koota/react';
-
-function createPlayer() {
-  const world = useWorld();
+function EnemyView({ entity }: { entity: Entity }) {
+  const transform = useTrait(entity, Transform)
+  if (!transform) return null
   
-  // Create a player entity with position, health and a tag
-  return world.spawn(
-    Position({ x: 0, y: 0, z: 0 }),
-    Health({ current: 100, max: 100 }),
-    IsPlayer
-  );
+  return (
+    <mesh position={transform.position}>
+      <boxBufferGeometry />
+      <meshStandardMaterial color="red" />
+    </mesh>
+  )
 }
 ```
 
-### Queries
+---
 
-Queries allow you to efficiently find and process entities with specific combinations of traits.
+## Using `useTraitEffect`
 
-```js
-import { useQuery } from 'koota/react';
-import { useFrame } from '@react-three/fiber';
+To react to changes in a trait without causing rerenders, use `useTraitEffect`. For example, you might want to update a mesh’s position in a ref:
+
+```tsx
+function EnemyView({ entity }: { entity: Entity }) {
+  const ref = useRef<THREE.Mesh>(null!)
+
+  // Subscribe to ECS changes outside of React’s render
+  useTraitEffect(entity, Transform, (transform) => {
+    if (!transform || !ref.current) return
+    ref.current.position.copy(transform.position)
+    ref.current.rotation.copy(transform.rotation)
+  })
+
+  return (
+    <mesh ref={ref}>
+      <boxBufferGeometry />
+      <meshStandardMaterial color="red" />
+    </mesh>
+  )
+}
+```
+
+---
+
+## React Three Fiber + ECS
+
+You can also integrate `useFrame` from R3F for certain updates:
+
+```tsx
+import { useFrame } from '@react-three/fiber'
+import { Movement, Transform } from '../traits'
 
 function MovementSystem() {
-  // Find all entities with both Position and Velocity
-  const entities = useQuery(Position, Velocity);
-  
-  useFrame((state, delta) => {
-    // Update each entity's position based on velocity
-    entities.forEach(entity => {
-      const position = entity.get(Position);
-      const velocity = entity.get(Velocity);
-      
-      position.x += velocity.x * delta;
-      position.y += velocity.y * delta;
-      position.z += velocity.z * delta;
-    });
-  });
-  
-  return null;
-}
-```
-
-## Using Koota in Viber3D Components
-
-Viber3D provides React hooks that leverage Koota's functionality:
-
-### Querying Entities
-
-```jsx
-import { useQuery, useQueryFirst } from 'koota/react';
-
-function EnemyList() {
-  // Get all enemy entities
-  const enemies = useQuery(IsEnemy, Position);
-  
-  return (
-    <group>
-      {enemies.map(enemy => (
-        <Enemy key={enemy.id()} entity={enemy} />
-      ))}
-    </group>
-  );
-}
-
-function PlayerCamera() {
-  // Get the first entity with IsPlayer trait
-  const player = useQueryFirst(IsPlayer);
-  
-  if (!player) return null;
-  
-  const position = player.get(Position);
-  
-  return (
-    <PerspectiveCamera 
-      position={[position.x, position.y + 5, position.z + 10]} 
-      lookAt={[position.x, position.y, position.z]} 
-    />
-  );
-}
-```
-
-### Accessing Trait Data
-
-```jsx
-import { useTrait } from 'koota/react';
-
-function HealthBar({ entity }) {
-  // Reactively observe the Health trait
-  const health = useTrait(entity, Health);
-  
-  if (!health) return null;
-  
-  return (
-    <div className="health-bar">
-      <div 
-        className="health-fill" 
-        style={{ width: `${(health.current / health.max) * 100}%` }} 
-      />
-    </div>
-  );
-}
-```
-
-### Modifying Entities with Actions
-
-```jsx
-import { createActions, useActions } from 'koota/react';
-
-// Define game actions
-const gameActions = createActions((world) => ({
-  damageEntity: (entity, amount) => {
-    if (entity.has(Health)) {
-      entity.set(Health, (prev) => ({
-        ...prev,
-        current: Math.max(0, prev.current - amount)
-      }));
-    }
-  },
-  spawnEnemy: (position) => {
-    return world.spawn(
-      Position(position),
-      Velocity({ x: 0, y: 0, z: 0 }),
-      Health({ current: 50, max: 50 }),
-      IsEnemy
-    );
-  }
-}));
-
-function GameControls() {
-  const { spawnEnemy } = useActions(gameActions);
-  
-  return (
-    <button onClick={() => spawnEnemy({ x: Math.random() * 10, y: 0, z: Math.random() * 10 })}>
-      Spawn Enemy
-    </button>
-  );
-}
-```
-
-## Advanced Features
-
-### Relationships
-
-Koota supports relationships between entities, which is useful for parent-child hierarchies, inventory systems, and more.
-
-```js
-import { relation } from 'koota';
-
-// Define a relationship
-const ChildOf = relation();
-const Contains = relation({ store: { quantity: 1 } });
-
-// Create a parent-child relationship
-const parent = world.spawn(Position);
-const child = world.spawn(Position, ChildOf(parent));
-
-// Create an inventory relationship with data
-const player = world.spawn(IsPlayer);
-const sword = world.spawn();
-player.add(Contains(sword));
-player.set(Contains(sword), { quantity: 1 });
-
-// Query relationships
-const inventory = player.targetsFor(Contains);
-const children = parent.targetsFor(ChildOf);
-```
-
-### Query Modifiers
-
-Koota provides powerful query modifiers to filter entities:
-
-```js
-import { Not, Or, createChanged } from 'koota';
-
-// Entities with Position but without Velocity
-const staticEntities = useQuery(Position, Not(Velocity));
-
-// Entities that are either enemies or have health
-const targets = useQuery(Or(IsEnemy, Health));
-
-// Track entities whose position has changed
-const Changed = createChanged();
-const movedEntities = useQuery(Changed(Position));
-```
-
-## Integration with Three.js
-
-Koota works seamlessly with Three.js objects in Viber3D:
-
-```js
-// Store Three.js objects in traits
-const ThreeObject = trait(() => new THREE.Object3D());
-const ThreeMesh = trait(() => new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshStandardMaterial({ color: 'red' })
-));
-
-function SyncThreeObjects() {
-  const entities = useQuery(Position, ThreeObject);
+  // This component acts as a "system" in React
+  const world = useWorld()
   
   useFrame(() => {
-    entities.forEach(entity => {
-      const position = entity.get(Position);
-      const object = entity.get(ThreeObject);
-      
-      object.position.set(position.x, position.y, position.z);
-    });
-  });
+    const time = world.get(Time)
+    if (!time) return
+    const { delta } = time
+    
+    world.query(Transform, Movement).updateEach(([t, m]) => {
+      t.position.add(m.velocity.clone().multiplyScalar(delta))
+    })
+  })
   
-  return null;
+  return null
 }
 ```
 
-## Performance Considerations
+---
 
-For optimal performance in Viber3D games:
+## Performance Optimizations
 
-1. **Use schema-based traits** for better memory layout and cache efficiency
-2. **Batch operations** using queries and `updateEach`
-3. **Minimize trait changes** to reduce change detection overhead
-4. **Use world traits** for global state like game time or settings
+1. **Memoize** expensive sub-components if they always render the same geometry.
+2. **Instancing** (in R3F) for large numbers of identical objects.
+3. **Culling & LOD** for objects not in view or too far away.
 
-```js
-// Efficient batch updates
-world.query(Position, Velocity).updateEach(([position, velocity], entity) => {
-  position.x += velocity.x * delta;
-  position.y += velocity.y * delta;
-  position.z += velocity.z * delta;
-});
+---
 
-// Global state with world traits
-const GameTime = trait({ elapsed: 0, delta: 0 });
-world.add(GameTime);
+## Next Steps
 
-// Update global time
-useFrame((state, delta) => {
-  world.set(GameTime, prev => ({
-    elapsed: prev.elapsed + delta,
-    delta
-  }));
-});
+- Explore [Actions](./6.actions.md) for centralizing ECS changes in your React components.
+- Check out official [React Three Fiber](https://github.com/pmndrs/react-three-fiber) docs for advanced rendering.
+- Combine with [Systems](./4.systems.md) for heavy logic outside of React’s render cycle.
+
+================
+File: 4.core-concepts/6.actions.md
+================
+---
+title: Actions
+description: Actions are centralized functions for modifying the game world in a predictable manner.
+---
+
+## Understanding Actions
+
+Actions in Viber3D (powered by Koota) are **centralized functions** that modify the ECS world. They help avoid scattering spawn/remove/update logic in multiple places.
+
+```ts
+import { createActions } from 'koota'
+import { IsPlayer, Health, Transform } from '../traits'
+
+export const actions = createActions((world) => ({
+  spawnPlayer: (position) => {
+    return world.spawn(
+      IsPlayer(),
+      Transform({ position }),
+      Health({ amount: 100 })
+    )
+  },
+  destroyAllPlayers: () => {
+    world.query(IsPlayer).forEach((player) => {
+      player.destroy()
+    })
+  }
+}))
 ```
 
-## Further Resources
+---
 
-- [Koota GitHub Repository](https://github.com/Ctrlmonster/koota)
-- [Koota Starter Template](https://github.com/Ctrlmonster/r3f-koota-starter)
-- [ECS Overview](/core-concepts/ecs-overview)
-- [Entities in Viber3D](/core-concepts/entities)
-- [Traits in Viber3D](/core-concepts/traits)
-- [Systems in Viber3D](/core-concepts/systems)
+## Using Actions in React
+
+With `useActions`, you get your action functions bound to the current `world`:
+
+```tsx
+import { useActions } from 'koota/react'
+import { actions } from '../actions'
+
+function GameController() {
+  const { spawnPlayer, destroyAllPlayers } = useActions(actions)
+  
+  useEffect(() => {
+    // Spawn a player on mount
+    spawnPlayer({ x: 0, y: 0, z: 0 })
+
+    // Cleanup on unmount
+    return () => destroyAllPlayers()
+  }, [])
+  
+  return null
+}
+```
+
+---
+
+## Best Practices
+
+1. **Centralize**: Store all your actions in a dedicated file (e.g. `src/actions.ts` or `actions/` folder).
+2. **Keep them pure**: Actions should only modify the ECS state; avoid large side effects.
+3. **Descriptive names**: Use clear naming like `spawnEnemyWave()`, `applyDamage()`, etc.
+4. **Cleanup logic**: Provide actions to remove entities or reset traits as needed.
+
+---
+
+## Action Composition
+
+Actions can call one another to build complex flows:
+
+```ts
+export const actions = createActions((world) => ({
+  spawnEnemy: (position) => {
+    return world.spawn(IsEnemy(), Transform({ position }), Health({ amount: 50 }))
+  },
+  spawnEnemyWave: (count) => {
+    for (let i = 0; i < count; i++) {
+      const position = getRandomPosition()
+      actions.spawnEnemy(position) // calling another action
+    }
+  }
+}))
+```
+
+---
+
+## Conditional Updates
+
+```ts
+export const actions = createActions((world) => ({
+  damageEntity: (entity, amount) => {
+    if (entity.has(Health)) {
+      entity.set(Health, (h) => {
+        const newAmount = Math.max(0, h.amount - amount)
+        if (newAmount <= 0) {
+          actions.destroyEntity(entity)
+        }
+        return { ...h, amount: newAmount }
+      })
+    }
+  },
+  destroyEntity: (entity) => entity.destroy()
+}))
+```
+
+---
+
+## Testing Actions
+
+Actions are straightforward to test. You can create a test world, apply your action, and inspect the result:
+
+```ts
+describe('playerActions', () => {
+  let world: World
+  let boundActions: ReturnType<typeof actions>
+
+  beforeEach(() => {
+    world = createWorld()
+    boundActions = actions.bindTo(world)
+  })
+
+  it('spawnPlayer creates a player entity', () => {
+    const player = boundActions.spawnPlayer({ x: 0, y: 0, z: 0 })
+    expect(player.has(IsPlayer)).toBe(true)
+    expect(player.has(Health)).toBe(true)
+  })
+
+  it('destroyAllPlayers removes all player entities', () => {
+    boundActions.spawnPlayer({ x: 0, y: 0, z: 0 })
+    boundActions.spawnPlayer({ x: 1, y: 0, z: 0 })
+    boundActions.destroyAllPlayers()
+    expect(world.query(IsPlayer).length).toBe(0)
+  })
+})
+```
+
+---
+
+## Summary
+
+Actions let you organize all your ECS modifications into a single, testable location—helping maintain clarity and consistency throughout your codebase.
+
+- Integrate [Actions in React](#using-actions-in-react) via `useActions`.
+- Combine with [Systems](./4.systems.md) for runtime logic and [Traits](./3.traits.md) for the data definition.
+- Keep your ECS usage clean, predictable, and well-structured.
+
+================
+File: 4.core-concepts/7.advanced.md
+================
+---
+title: Advanced ECS Topics
+description: Dive deeper into Koota’s advanced features for optimization, low-level control, and special ECS workflows.
+---
+
+This section covers advanced features in Koota. While not always required, they can significantly improve performance, enable custom workflows, or simplify complex scenarios.
+
+---
+
+## 1. Direct Store Updates with `useStore()`
+
+In most cases, you’ll read and update trait data via `.updateEach()`, `entity.set()`, or the React hooks. However, for **performance-critical** operations on many entities, you can **directly modify** the underlying store arrays.
+
+```ts
+world.query(Position, Velocity).useStore(([pos, vel], entities) => {
+  // pos, vel are SoA (Structure of Arrays) stores if you used a schema-based trait
+  // If it's AoS (callback-based trait), they’ll be arrays of objects instead.
+  
+  for (let i = 0; i < entities.length; i++) {
+    const e = entities[i] // an Entity handle
+    const eid = e.id()    // numeric ID to index into SoA arrays
+    
+    pos.x[eid] += vel.x[eid] * delta
+    pos.y[eid] += vel.y[eid] * delta
+  }
+})
+```
+
+### Notes on `useStore()`
+- **Bypasses** typical event triggers and change detection. 
+- If you rely on `onChange(...)` or the `Changed(...)` query modifier, direct store writes might not trigger those events.
+- Best used in performance-critical “hot” loops.
+
+---
+
+## 2. Partial Selection of Traits with `select()`
+
+You can limit which traits to retrieve or update during a query. If your system only needs to modify `Health` (but still wants the entity to have `Transform`, `Velocity`, etc.), you can do:
+
+```ts
+world.query(Transform, Velocity, Health)
+  .select(Health)
+  .updateEach(([health]) => {
+    health.amount -= 1
+  })
+```
+
+**Why use it**:
+- Performance: Minimizes overhead by only pulling the data you actually need.
+- Clarity: Emphasizes which traits you’re reading/updating.
+
+---
+
+## 3. Trait Lifecycle Events
+
+Subscribe to trait additions, removals, or changes at the **world** level:
+
+```ts
+const unsubAdd = world.onAdd(Position, (entity) => {
+  console.log('Entity added Position:', entity.id())
+})
+
+const unsubRemove = world.onRemove(Health, (entity) => {
+  console.log('Entity removed Health:', entity.id())
+})
+
+const unsubChange = world.onChange(Health, (entity) => {
+  console.log('Entity changed Health:', entity.id(), entity.get(Health))
+})
+
+// Later, to stop listening:
+unsubAdd()
+unsubRemove()
+unsubChange()
+```
+
+### Multi-Trait Events
+You can also pass an array or query-like structure:
+```ts
+// Fired when an entity gains or loses BOTH Position & Velocity
+world.onAdd([Position, Velocity], (entity) => { /* ... */ })
+world.onRemove([Position, Velocity], (entity) => { /* ... */ })
+```
+
+---
+
+## 4. Querying All Entities
+
+If you call `world.query()` **without any traits**, you get **all** _queryable_ entities in the world:
+
+```ts
+const everything = world.query()
+everything.forEach((entity) => {
+  console.log('Entity:', entity.id())
+})
+```
+
+*Koota excludes certain internal or “excluded” entities by default, so you won’t see world-level entities or other hidden items. If you want literally every single entity (including system-level ones), you can do `world.entities`, but that’s rarely needed.*
+
+---
+
+## 5. Conditional System Scheduling
+
+Not all systems need to run every frame. In many games, you want different subsets of systems to run in different game states (e.g. “paused,” “main menu,” “combat,” etc.):
+
+```ts
+function updateWorld(world: World) {
+  const state = world.get(GameState)
+  if (!state) return
+
+  if (state.phase === 'Menu') {
+    menuSystems.forEach(sys => sys(world))
+  } else if (state.phase === 'Combat') {
+    combatSystems.forEach(sys => sys(world))
+  } else {
+    normalSystems.forEach(sys => sys(world))
+  }
+}
+```
+
+**Benefits**:
+- Save performance by not running irrelevant systems.
+- Keep logic organized for different states or phases of the game.
+
+---
+
+## 6. Additional Relationship Patterns
+
+You’ve seen the basics of `relation()`, including `exclusive: true` or `autoRemoveTarget: true`. Consider these patterns:
+
+1. **Multi-level Parenting**: A parent can also have a parent, forming a hierarchical tree. If you set `autoRemoveTarget: true`, destroying a top-level parent **cascades** removal down the chain.
+2. **Bidirectional or “Friend/Ally”**: If each entity references the other with a relation, you can quickly query “allies.” 
+3. **Filtering with Relationship Data**: If you store fields like `{ amount: 10 }`, you can filter the query to find relationships with specific amounts or states.
+
+---
+
+## Summary
+
+1. **Store-Level Access**: `useStore()` gives you maximum control over how you read/write data, ideal for heavy numeric updates.
+2. **Selective Trait Access**: `.select()` cuts down on unneeded data access in queries.
+3. **Lifecycle Events**: Listen for additions, removals, or changes to traits at a global level.
+4. **Whole-World Queries**: `world.query()` with no arguments returns all queryable entities.
+5. **Conditional Scheduling**: Run only the systems you need at a given time.
+6. **Advanced Relationship Usage**: Use relationships for complex data structures or parent-child hierarchies.
+
+By combining these advanced features with the **core ECS** docs, you can build extremely optimized, maintainable game logic in Viber3D.
+
+================
+File: 5.addons/1.physics.md
+================
+---
+title: Physics
+description: Integrate real-time physics in Viber3D using Jolt (or another engine) with ECS traits and systems.
+---
+
+# Physics in Viber3D
+
+Viber3D uses an **ECS** approach for organizing game data. You can integrate a physics engine—like [Jolt](https://github.com/jrouwe/JoltPhysics.js/)—by defining **traits** for physics objects and **systems** that step the simulation each frame.
+
+This guide covers:
+
+1. [Overview & Key Concepts](#1-overview--key-concepts)  
+2. [Initializing a Physics World](#2-initializing-a-physics-world)  
+3. [Creating Physics Bodies](#3-creating-physics-bodies)  
+4. [Stepping & Syncing Transforms](#4-stepping--syncing-transforms)  
+5. [Collision Handling](#5-collision-handling)  
+6. [Motion Types & Continuous Collision](#6-motion-types--continuous-collision)  
+7. [Common Patterns & Tips](#7-common-patterns--tips)  
+8. [Summary & Next Steps](#8-summary--next-steps)
+
+---
+
+## 1. Overview & Key Concepts
+
+1. **PhysicsWorld Trait**  
+   A specialized trait storing the engine’s “world” or “physics interface,” so it’s accessible anywhere in ECS.
+2. **RigidBody / PhysicsBody Traits**  
+   Each entity that should have physics (e.g. a crate, sphere, or player) can hold a trait referencing its underlying physics **body** in Jolt.
+3. **Systems**  
+   - A “build bodies” system to create bodies for newly spawned ECS entities.  
+   - A “step physics” system to advance the physics simulation each frame.  
+   - A “sync transforms” system to copy the updated positions/rotations back to Three.js objects (or to ECS `Position` / `Rotation` traits).
+
+### Why Jolt?
+
+- **Speed**: Written in C++ and compiled to WebAssembly.
+- **Feature-rich**: Rigid bodies, collisions, advanced shape definitions, etc.
+- **Optional**: You can swap in a different library (e.g., Rapier) by following similar patterns.
+
+---
+
+## 2. Initializing a Physics World
+
+**Goal**: Load the Jolt library once, create a Jolt “world,” and store it in a custom ECS trait.
+
+```ts
+// traits/jolt-world.ts
+import { trait } from 'koota'
+import type Jolt from 'jolt-physics'
+
+export const JoltWorld = trait(() => new JoltWorldImpl())
+
+export class JoltWorldImpl {
+  static JOLT_NATIVE: typeof Jolt
+  joltInterface: Jolt.JoltInterface = null!
+  bodyInterface: Jolt.BodyInterface = null!
+  physicsSystem: Jolt.PhysicsSystem = null!
+  initialized = false
+
+  constructor() {
+    if (!JoltWorldImpl.JOLT_NATIVE) {
+      throw new Error("Jolt not loaded yet.")
+    }
+    // Create the JoltInterface with default settings
+    const J = JoltWorldImpl.JOLT_NATIVE
+    const settings = new J.JoltSettings()
+    this._setupCollisionFiltering(settings)
+    
+    const jolt = new J.JoltInterface(settings)
+    J.destroy(settings)
+
+    this.physicsSystem = jolt.GetPhysicsSystem()
+    this.bodyInterface = this.physicsSystem.GetBodyInterface()
+    this.joltInterface = jolt
+
+    this.initialized = true
+  }
+
+  stepPhysics(dt: number) {
+    // E.g., do multiple substeps if dt is large
+    const steps = dt > 1/55 ? 2 : 1
+    this.joltInterface.Step(dt, steps)
+  }
+
+  _setupCollisionFiltering(settings: Jolt.JoltSettings) {
+    // your collision layers, etc.
+  }
+}
+```
+
+**Initialize** the library at startup:
+
+```ts
+// actions/use-jolt-actions.ts
+import { createActions } from 'koota/react'
+import { JoltWorld, JoltWorldImpl } from '../traits/jolt-world'
+
+export const useJoltActions = createActions((world) => ({
+  async initWorld() {
+    if (world.has(JoltWorld)) {
+      // already initialized
+      return
+    }
+
+    // Load the Jolt WASM
+    const joltInit = await import('jolt-physics')
+    // Store the reference globally
+    JoltWorldImpl.JOLT_NATIVE = await joltInit.default()
+
+    // Add the JoltWorld trait to ECS
+    world.add(JoltWorld())
+    console.log("Jolt world created.")
+  }
+}))
+```
+
+You can call `initWorld()` from a React component, or anywhere else in your startup code.
+
+---
+
+## 3. Creating Physics Bodies
+
+### a) “NeedsJoltBody” Trait
+
+Define a trait that marks an entity as **needing** a physics body. This can include settings: whether the body is dynamic, static, or kinematic, etc.
+
+```ts
+// traits/needs-jolt-body.ts
+import { trait } from 'koota'
+
+export const NeedsJoltBody = trait({
+  layer: "moving" as "moving" | "non_moving",
+  motionType: "dynamic" as "dynamic" | "static" | "kinematic",
+  buildConvexShape: false,
+  continuousCollisionMode: false,
+})
+```
+
+You might also define a trait `JoltBody` referencing the final Jolt body object:
+
+```ts
+// traits/jolt-body.ts
+import { trait } from 'koota'
+import type Jolt from 'jolt-physics'
+
+export const JoltBody = trait<null | Jolt.Body>(null)
+```
+
+### b) System to Build Bodies
+
+When new entities have `NeedsJoltBody` + a mesh or geometry trait (like `MeshRef`), we create an actual Jolt `Body`.
+
+```ts
+// systems/build-jolt-bodies.ts
+import { World } from 'koota'
+import { NeedsJoltBody } from '../traits/needs-jolt-body'
+import { JoltBody } from '../traits/jolt-body'
+import { JoltWorld, JoltWorldImpl } from '../traits/jolt-world'
+import { MeshRef } from '../traits/mesh-ref'
+import { inferInitTransformsFromMesh, createShapeFromGeometry } from '../misc/jolt-helper'
+
+export function BuildJoltBodies({ world }: { world: World }) {
+  if (!world.has(JoltWorld)) return
+
+  const joltWorld = world.get(JoltWorld)
+  const J = JoltWorldImpl.JOLT_NATIVE
+
+  world.query(NeedsJoltBody, MeshRef).updateEach(([needs, meshRef], entity) => {
+    const { pos, rot } = inferInitTransformsFromMesh(meshRef.ref)
+    const shape = needs.buildConvexShape
+      ? createShapeFromGeometry(meshRef.ref.geometry)
+      : /* other shape logic, e.g. BoxShape */ new J.BoxShape(1,1,1)
+
+    // create BodyCreationSettings
+    const layer = needs.layer === 'moving' ? 1 : 0
+    const motionType = {
+      dynamic: J.EMotionType_Dynamic,
+      static: J.EMotionType_Static,
+      kinematic: J.EMotionType_Kinematic
+    }[needs.motionType]
+
+    const creation = new J.BodyCreationSettings(shape, pos, rot, motionType, layer)
+    const body = joltWorld.bodyInterface.CreateBody(creation)
+    J.destroy(creation)
+
+    // add the body to jolt
+    joltWorld.bodyInterface.AddBody(body.GetID(), J.EActivation_Activate)
+
+    // handle continuous collision
+    if (needs.continuousCollisionMode) {
+      joltWorld.bodyInterface.SetMotionQuality(body.GetID(), J.EMotionQuality_LinearCast)
+    }
+
+    // remove the NeedsJoltBody trait (we built the body)
+    entity.remove(NeedsJoltBody)
+    // add the JoltBody trait referencing the new body
+    entity.add(JoltBody(body))
+  })
+}
+```
+
+This approach ensures that each newly spawned entity gets a Jolt body exactly once.
+
+---
+
+## 4. Stepping & Syncing Transforms
+
+### a) Update the Physics World
+
+A system that calls `stepPhysics` each frame:
+
+```ts
+// systems/update-jolt.ts
+import { World } from 'koota'
+import { JoltWorld } from '../traits/jolt-world'
+
+export function UpdateJolt({ world, delta }: { world: World; delta: number }) {
+  if (!world.has(JoltWorld)) return
+  const joltWorld = world.get(JoltWorld)
+  joltWorld.stepPhysics(delta)
+}
+```
+
+### b) Sync to ECS or Three.js
+
+You can store transforms in ECS `Position` / `Rotation` traits, or directly sync to a `MeshRef`. For example:
+
+```ts
+// systems/sync-three-to-jolt.ts
+import { World } from 'koota'
+import { JoltBody } from '../traits/jolt-body'
+import { MeshRef } from '../traits/mesh-ref'
+import { JoltWorld } from '../traits/jolt-world'
+
+export function SyncThreeToJolt({ world }: { world: World }) {
+  if (!world.has(JoltWorld)) return
+
+  world.query(JoltBody, MeshRef).useStores(([rb, meshRef], entities) => {
+    for (const e of entities) {
+      const body = rb[e.id()]
+      const mesh = meshRef[e.id()]
+      if (!body || !mesh) continue
+
+      // read Jolt transform
+      const pos = body.GetPosition()
+      const rot = body.GetRotation()
+
+      // apply to Three.js mesh
+      mesh.position.set(pos.GetX(), pos.GetY(), pos.GetZ())
+      mesh.quaternion.set(rot.GetX(), rot.GetY(), rot.GetZ(), rot.GetW())
+    }
+  })
+}
+```
+
+> **Note**: `useStores` bypasses some overhead by accessing data in a more raw manner—useful for performance-critical loops.
+
+---
+
+## 5. Collision Handling
+
+### a) Basic Approach
+
+Jolt can track collisions or contact points. Depending on your version, you might:
+
+- Read a contact list or events each step (`GetCollisionsThisFrame()`, or similar).
+- Subscribe to collision callbacks via Jolt’s event system.
+
+Once you have collisions, you can do ECS logic:
+
+```ts
+function handleCollisions(world: World) {
+  const joltWorld = world.get(JoltWorld)
+  // some hypothetical API
+  const collisions = joltWorld.physicsSystem.GetCollisionEvents()
+  for (const c of collisions) {
+    const bodyA = c.bodyA
+    const bodyB = c.bodyB
+    // find which entities correspond to bodyA, bodyB, then apply logic
+  }
+}
+```
+
+Because Koota queries are trait-based, you might store a map of `BodyID -> Entity` to help quickly find which entity is colliding. You can store that map in your `JoltWorldImpl` or a separate trait.
+
+---
+
+## 6. Motion Types & Continuous Collision
+
+**Jolt** supports different motion types:
+
+- **Static**: For immovable objects (floors, walls).
+- **Dynamic**: Fully simulated by physics (gravity, collisions).
+- **Kinematic**: Driven by user code, but can push dynamic bodies out of the way.
+
+**Continuous Collision** (CCD) helps fast-moving objects (e.g., bullets) avoid tunneling. In the code, we check `continuousCollisionMode` and set `SetMotionQuality(body.GetID(), J.EMotionQuality_LinearCast)`.
+
+---
+
+## 7. Common Patterns & Tips
+
+1. **Separation of Concerns**  
+   - Keep “build bodies” in one system, “update the world” in another, and “sync transforms” in a third.
+2. **Deferred Body Creation**  
+   - If your engine loads slowly or geometry is not ready, a system can wait until necessary data is present.
+3. **Destroying Entities**  
+   - Remember to remove or destroy the underlying Jolt body. For example, if an entity has a `DestroyMe` trait, a system can remove its Jolt body from the world.
+4. **Performance**  
+   - Potentially run heavy collision checks at a lower frequency if your game can tolerate it.
+5. **Accessing ECS or React**  
+   - In React code, prefer using actions or hooking into ECS queries to do spawns, impulses, etc.
+
+---
+
+## 8. Summary & Next Steps
+
+- **Initialize** Jolt in a single ECS trait (`JoltWorld`), which you can reference anywhere.
+- **Build** bodies for new ECS entities using a system that checks a `NeedsJoltBody` trait or similar.
+- **Step** the physics in an `UpdateJolt` system each frame, and **sync** transforms with your ECS or Three.js objects.
+- For collisions or advanced features (e.g. joints, triggers), adapt the same pattern: define traits, attach them, and process with systems.
+
+**Next Steps**:
+
+1. **Batched Mesh**: If you have many objects, see [Batch Meshes](/addons/batch-mesh) for rendering optimizations.  
+2. **Actions**: Create ECS actions to spawn, remove, or apply forces to bodies in a centralized, testable manner.  
+3. **In-Depth**: Explore official [Jolt Physics docs](https://github.com/jrouwe/JoltPhysics.js/) for advanced usage: constraints, sleeping, broad-phase tuning, etc.  
+
+That’s it! You now have a fully integrated ECS + Jolt physics pipeline in Viber3D.
+
+================
+File: 5.addons/2.batch-mesh.md
+================
+---
+title: Batch Mesh
+description: Optimize rendering of large numbers of similar objects by batching them into a single Three.js mesh.
+---
+
+# Batch Mesh
+
+When your scene has **many** identical or similar objects—like crates, bullets, or environment props—rendering each as a separate Three.js mesh can become a performance bottleneck. By **batching** them into a single mesh under the hood, you reduce draw calls and improve framerates.
+
+This guide covers:
+
+1. [Why Use a Batched Mesh](#1-why-use-a-batched-mesh)  
+2. [ECS Setup & Traits](#2-ecs-setup--traits)  
+3. [Systems for Managing Instances](#3-systems-for-managing-instances)  
+4. [Handling Multiple Geometries](#4-handling-multiple-geometries)  
+5. [Adding & Removing Objects on the Fly](#5-adding--removing-objects-on-the-fly)  
+6. [Bounding Volumes & Culling](#6-bounding-volumes--culling)  
+7. [Common Patterns & Tips](#7-common-patterns--tips)  
+8. [Summary & Next Steps](#8-summary--next-steps)
+
+---
+
+## 1. Why Use a Batched Mesh
+
+**Draw Calls**: Each `Mesh` in Three.js can cost you a draw call. If you have hundreds or thousands of small objects, you can quickly hit performance limits.
+
+**Batch Mesh**: Combines many objects into a **single** Three.js mesh. This drastically cuts down the number of draw calls (often to just one). You can still manipulate individual “instances” via per-instance transform data.
+
+---
+
+## 2. ECS Setup & Traits
+
+### a) The BatchedMesh Trait
+
+You’ll need a specialized ECS trait (e.g. `TBatchedMesh`) to store an instance of your custom “BatchedMesh” class:
+
+```ts
+// traits.ts
+import { trait } from 'koota'
+import { BatchedMesh } from 'three-batched-mesh' // or your custom class
+
+export const TBatchedMesh = trait(() => new BatchedMesh())
+```
+
+**Note**: How exactly you implement or import `BatchedMesh` is up to you. Some devs roll their own classes; others use a library that extends `InstancedMesh`.
+
+### b) Storing Instance Info
+
+Each entity that’s **represented** inside the batch needs a small record of which geometry it uses and which instance ID is assigned in the batch. For example:
+
+```ts
+export const BatchCoordinates = trait({
+  geometryId: -1,
+  instanceId: -1,
+  batchedMesh: null, // reference to the actual BatchedMesh instance
+  batchEntity: -1,   // ID or reference to the entity that owns the BatchedMesh
+})
+```
+
+This trait will be added to each entity once it is successfully batched.
+
+### c) Additional Traits
+
+1. **`BatchCount`**: Track how many instances a single BatchedMesh can hold.
+2. **`GeometryCache`**: Optionally map from a `BufferGeometry` to a geometry ID within the batch.
+3. **`IsBatchedOriginOf`**: A relationship trait if you want the batch entity to “know” which child entities it spawned.
+
+---
+
+## 3. Systems for Managing Instances
+
+The workflow typically has **three** main systems:
+
+1. **Spawn/Attach Instances**: If an entity has `(Position, some geometry trait)` but not yet in the batch, add it.
+2. **Remove Instances**: If an entity is destroyed or flagged for removal, remove its instance from the batch.
+3. **Update Transforms**: Each frame, sync ECS positions/rotations to the instance transforms.
+
+### a) Spawn Instances
+
+```ts
+// systems/spawn-batch-instances.ts
+import { World, Not } from 'koota'
+import { TBatchedMesh, BatchCoordinates, Position, TColor } from '../traits'
+import { Matrix4 } from 'three'
+
+const tempMatrix = new Matrix4()
+
+export function SpawnBatchInstances({ world }: { world: World }) {
+  // Find a batch entity that isn't full
+  const batchEntity = world.queryFirst(TBatchedMesh, /* possibly BatchCount, etc. */)
+  if (!batchEntity) return
+
+  const batchedMesh = batchEntity.get(TBatchedMesh)
+
+  // For each entity that has a position/color but no BatchCoordinates
+  world.query(Position, TColor, Not(BatchCoordinates)).updateEach(([pos, color], entity) => {
+    // Possibly check if batch is full
+    // Add geometry or shape as needed
+
+    // add instance to the batched mesh
+    const geometryId = 0 // or your chosen geometry slot
+    const instanceId = batchedMesh.addInstance(geometryId)
+
+    // record the new instance
+    entity.add(BatchCoordinates({
+      geometryId,
+      instanceId,
+      batchedMesh,
+      batchEntity: batchEntity.id()
+    }))
+
+    // Initial transform
+    tempMatrix.setPosition(pos)
+    batchedMesh.setMatrixAt(instanceId, tempMatrix)
+
+    // If your batched mesh supports per-instance color:
+    batchedMesh.setColorAt(instanceId, color)
+
+    // Recompute bounding volume if needed
+    batchedMesh.computeBoundingBox()
+    batchedMesh.computeBoundingSphere()
+  })
+}
+```
+
+### b) Removing Instances
+
+If an entity is destroyed or flagged for removal, remove its instance from the batch:
+
+```ts
+// systems/remove-batch-instances.ts
+import { World } from 'koota'
+import { BatchCoordinates, DestroyMe } from '../traits'
+
+export function RemoveBatchInstances({ world }: { world: World }) {
+  // For each entity that has batch coords and is flagged for removal
+  world.query(BatchCoordinates, DestroyMe).updateEach(([coords], entity) => {
+    const { batchedMesh, instanceId } = coords
+    batchedMesh.deleteInstance(instanceId)
+
+    // update bounding volumes if needed
+    batchedMesh.computeBoundingBox()
+    batchedMesh.computeBoundingSphere()
+
+    // remove the trait or destroy the entity
+    entity.destroy()
+  })
+}
+```
+
+### c) Updating Transforms Each Frame
+
+```ts
+// systems/sync-batch-transforms.ts
+import { World } from 'koota'
+import { BatchCoordinates, Position, Rotation, Scale } from '../traits'
+import { Matrix4, Vector3, Quaternion } from 'three'
+
+const tempMatrix = new Matrix4()
+const defaultScale = new Vector3(1,1,1)
+
+export function SyncBatchTransforms({ world }: { world: World }) {
+  // For each entity with batch coords and transform data
+  world.query(Position, Rotation, BatchCoordinates).updateEach(([pos, rot, coords], entity) => {
+    const scale = entity.has(Scale) ? entity.get(Scale) : defaultScale
+
+    tempMatrix.compose(pos, rot, scale)
+    coords.batchedMesh.setMatrixAt(coords.instanceId, tempMatrix)
+  })
+}
+```
+
+**Remember** to call `batchedMesh.update()` or equivalent if your implementation requires it.
+
+---
+
+## 4. Handling Multiple Geometries
+
+Some batched mesh classes allow multiple geometries within one “batch.” You can store a `GeometryCache` trait to map from specific `BufferGeometry` objects to geometry IDs:
+
+```ts
+// traits.ts
+export const GeometryCache = trait(() => new Map<any /* geometry ref */, number>())
+
+// systems/spawn-batch-instances.ts
+if (!geomCache.has(geometryRef)) {
+  const id = batchedMesh.addGeometry(geometryRef)
+  geomCache.set(geometryRef, id)
+}
+const geometryId = geomCache.get(geometryRef)!
+const instanceId = batchedMesh.addInstance(geometryId)
+```
+
+---
+
+## 5. Adding & Removing Objects on the Fly
+
+Because you’re using an ECS, you can dynamically add or remove entities:
+
+1. **Spawn** new objects -> The spawn system creates new ECS entities with `(Position, TColor, maybe some geometry trait)`.
+2. A system tries to attach them to a batch mesh. If no batch mesh is available or if it’s full, you might create a new batch entity or queue them for the next frame.
+3. **Destroy** or “flag for removal” -> The remove system sees `DestroyMe` and updates the batch accordingly.
+
+This approach is flexible and handles large scenes or dynamic states seamlessly.
+
+---
+
+## 6. Bounding Volumes & Culling
+
+A typical `BatchedMesh` (or `InstancedMesh`) uses an overall bounding box/sphere for **all** instances. Update it whenever you add or remove instances, or if they move far from the original bounding region. Three.js uses this bounding volume for frustum culling.
+
+If you have advanced requirements for partial culling (culled per instance, not entire batch), you might need more sophisticated logic—like subdividing your batch or doing manual culling checks.
+
+---
+
+## 7. Common Patterns & Tips
+
+1. **Batch Capacity**  
+   - Decide how many instances a single batch can hold (e.g. 100, 1000). Once full, create another batch entity.
+2. **Single Material**  
+   - All instances in a single batch typically share **one** material. If you need varied materials, you might need multiple batches or advanced multi-material instancing.
+3. **Sorting Entities**  
+   - Some devs group similar objects (same geometry, same material) in the same batch.
+4. **Destroy or Reuse?**  
+   - Instead of destroying an entity’s instance, consider reusing the slot for a newly spawned object if you want to minimize overhead.  
+5. **Actions**  
+   - Provide a nice user-facing action (e.g., `spawnCube()`) that spawns the entity and sets up everything. This centralizes your logic.
+6. **Performance**  
+   - For extremely large numbers of objects, ensure you only do matrix updates when necessary (e.g. if something’s changed).
+
+---
+
+## 8. Summary & Next Steps
+
+**Batch Mesh** is a powerful approach to rendering many objects efficiently:
+
+- Create a specialized ECS trait (e.g. `TBatchedMesh`) that wraps a class handling instanced geometry.
+- Write systems for **spawning** new instances, **removing** dead ones, and **syncing** transforms each frame.
+- Optionally handle multiple geometry types via a `GeometryCache`.
+- Keep bounding volumes updated so culling remains effective.
+
+### Next Steps
+
+- **Physics**: If these objects need collisions, see [Physics](/addons/physics). You may handle physics each object individually, or treat them as a large static or dynamic chunk.  
+- **Actions**: Provide convenient ECS actions so your React components can spawn or remove batched objects with a single call.  
+- **Advanced**: Explore partial culling, LOD, or more sophisticated indexing methods for extremely large scenes.
+
+That’s it! You now have a blueprint for high-performance rendering of large numbers of similar objects in Viber3D.
 
 
 
