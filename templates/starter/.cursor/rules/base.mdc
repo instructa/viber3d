@@ -1,125 +1,40 @@
 ---
-description: 
-globs: 
+description: Viber3D Coding Guidelines
+globs:
 alwaysApply: true
 ---
-# R3F Game Development Rules
 
-You are an expert R3F (React Three Fiber) game developer specializing in ECS architecture with Koota.
+# R3F + Koota ECS Base Rules
 
-## Architecture Principles
+## Core Architecture
 
-### Entity Component System (ECS)
-- Use Koota for game logic and state management
-- Keep React components purely for rendering
-- Never mix game logic with visual components
+- Use Koota ECS for all game logic.
+- Keep React components purely presentational.
+- Do not mix ECS logic and React rendering.
 
-### Component Structure
-- Components should be purely presentational
-- Use `useTraitEffect` for responding to state changes
-- Avoid `useFrame` for game logic - reserve it for visual effects only
-- Place all game logic in system files
-
-## File Organization
-```typescript
+## Directory Structure
+```
 src/
-├── components/     # React components for rendering
-│   └── *.tsx      # Visual components only
-├── systems/       # Game logic systems
-│   └── *.ts      # Pure logic, no React/R3F imports
-├── traits/       # Koota traits/components
-│   └── *.ts      # Define entity traits
-└── game/         # Core game setup
-    └── *.ts      # World configuration
+├── components/  # React components for rendering
+├── systems/     # ECS logic systems (pure TypeScript)
+├── traits/      # Koota traits for data
+├── utils/       # Utility helpers (math, data structures, etc.)
+└── game/        # Core setup (world creation, scheduling, etc.)
 ```
 
-## Coding Standards
+## Important Guidelines
 
-### Systems
-- Systems should be pure functions
-- Systems handle one specific aspect of game logic
-- Systems should only query relevant traits
-- Follow pattern: `export const systemName = (world: World) => void`
+1. Systems must be stateless functions that query traits and update ECS data.
+2. Components only render visuals; use `useTraitEffect` to reflect trait changes.
+3. Traits hold data; avoid logic in them. Keep them minimal and typed.
+4. Relationships (`relation()`) can be used for parent-child or referencing entities.
+5. SoA vs AoS: Use schema-based traits for large numeric data, callback-based traits for complex objects.
+6. Advanced Queries: Use partial selection (`.select(...)`) or specialized operators (`Not`, `Or`, `createAdded`, etc.) when needed.
+7. Scheduling: If you have multiple systems, consider a scheduling approach so only relevant systems run in different states (e.g. paused vs. active).
 
-### Components
-- Use TypeScript for all components
-- Components should only handle rendering and visual effects
-- Use `useTraitEffect` for responding to state changes
-- Keep mesh references in Koota's `Ref` trait
+## Anti-Patterns
 
-### Traits
-- Keep traits minimal and focused
-- Use TypeScript interfaces for trait types
-- Prefer composition over inheritance
-
-## Best Practices
-
-### Movement & Camera
-- Handle all movement in systems, not components
-- Camera following should be system-based
-- Use Transform trait for position/rotation
-- Separate input handling from movement logic
-
-### Performance
-- Use ECS queries efficiently
-- Minimize React state usage
-- Use `useLayoutEffect` for initial setup
-- Keep visual effects isolated in dedicated components
-
-### Visual Effects
-- Only use `useFrame` for visual-only animations
-- Keep effect logic separate from game logic
-- Use Three.js efficiently (reuse materials/geometries)
-
-## Example Patterns
-
-### Correct System Pattern:
-```typescript
-export const movementSystem = (world: World) => {
-    world.query(IsPlayer, Transform, Input).updateEach(([transform, input]) => {
-        // Update transform based on input
-    });
-};
-```
-
-### Correct Component Pattern:
-```typescript
-export function GameComponent({ entity }: { entity: Entity }) {
-    useTraitEffect(entity, SomeTrait, (trait) => {
-        // React to trait changes
-    });
-
-    return <mesh>...</mesh>;
-}
-```
-
-## Anti-Patterns to Avoid
-- ❌ Don't use `useFrame` for game logic
-- ❌ Don't mix ECS logic in React components
-- ❌ Don't store game state in React state
-- ❌ Don't update positions directly in components
-
-## When Writing Code
-1. First determine if logic belongs in system or component
-2. Systems for game logic, components for visuals
-3. Use traits to communicate between systems
-4. Keep React components purely presentational
-5. Always map out the existing architecture before writing code
-6. Look for patterns in how features are organized
-7. Identify the core architectural components
-
-If you see:
-- components/feature-name/
-- systems/feature-name/
-- traits/feature-name/
-- Use these same patterns for new features
-
-Search for:
-- Similar feature names
-- Base components (like "Game", "App", "Main")
-- Common patterns (like "*Container", "*Provider")
-
-Stop and investigate if you find:
-- Similar class/component names
-- Multiple entry points
-- Parallel implementations of core features
+- Do not place game logic in React hooks (e.g. `useFrame`), except for purely visual effects.
+- Avoid storing ECS-related state in React state.
+- Never mutate traits inside components. Use systems or actions instead.
+- Do not initialize or destroy ECS entities directly in components (use an action or system).

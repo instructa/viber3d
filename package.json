@@ -26,7 +26,7 @@
     "release": "pnpm build:packages && pnpm --filter viber3d release",
     "release:alpha": "pnpm build:packages && pnpm --filter viber3d release:alpha",
     "release:edge": "pnpm build:packages && pnpm --filter viber3d release:edge",
-    "llms": "npx repomix docs/viber3d-docs/content --include '**/*.md' --ignore '**/1.index.md,index.md,*credits*.md,*viber3d*' --output docs/viber3d-docs/public/llms_full.txt"
+    "llms": "npx repomix docs/viber3d-docs/content --include '4.core-concepts/*.md' --output docs/viber3d-docs/public/llms_full.txt"
   },
   "keywords": [
     "viber3d",

@@ -1,0 +1,97 @@
+---
+description: Centralized ECS Actions
+globs: src/actions/*.ts
+alwaysApply: false
+---
+
+# Actions Guidelines
+
+## Purpose
+
+- Actions are centralized functions that modify the ECS world in predictable ways.
+- They keep spawn/remove/update logic out of components and systems, providing a single place for entity manipulation.
+
+## Core Principles
+
+1. Single Entry Points  
+   Write all creation, destruction, or major trait updates in these functions.  
+2. Pure ECS Focus  
+   Do not add external side effects or UI manipulation.  
+3. Descriptive Names  
+   Use clear names like `spawnEnemy()`, `applyDamage()`, or `destroyEntity()`.  
+
+## Recommended Usage
+
+```ts
+import { createActions } from 'koota'
+import { IsEnemy, Transform, Health } from '../traits'
+
+export const actions = createActions((world) => ({
+  spawnEnemy: (position) => {
+    return world.spawn(
+      IsEnemy(),
+      Transform({ position }),
+      Health({ amount: 50 })
+    )
+  },
+  damageEntity: (entity, amount) => {
+    if (entity.has(Health)) {
+      entity.set(Health, (h) => {
+        const newAmount = Math.max(0, h.amount - amount)
+        if (newAmount <= 0) {
+          actions.destroyEntity(entity)
+        }
+        return { ...h, amount: newAmount }
+      })
+    }
+  },
+  destroyEntity: (entity) => {
+    entity.destroy()
+  }
+}))
+```
+
+## Integration with React
+
+- Use `useActions(actionsFile)` from `koota/react` to bind actions to the current `world`.
+- Keep React components free of direct ECS manipulation. Call these action functions instead.
+
+```tsx
+function GameInit() {
+  const { spawnEnemy } = useActions(actions)
+
+  useEffect(() => {
+    spawnEnemy({ x: 0, y: 5, z: 0 })
+  }, [])
+
+  return null
+}
+```
+
+## Testing Actions
+
+- Create a fresh `world` in each test and bind actions with `actions.bindTo(world)`.
+- Verify entity changes after calling each action.
+
+```ts
+describe('actions', () => {
+  let world
+  let boundActions
+
+  beforeEach(() => {
+    world = createWorld()
+    boundActions = actions.bindTo(world)
+  })
+
+  it('spawnEnemy creates an enemy entity', () => {
+    const ent = boundActions.spawnEnemy({ x: 0, y: 1, z: 0 })
+    expect(ent.has(IsEnemy)).toBe(true)
+  })
+})
+```
+
+## Avoid
+
+- Do not add direct DOM or React manipulations in actions.
+- Do not handle input events or animations here; keep it purely for ECS state changes.
+- Avoid side effects that do not relate to ECS data. Keep them simple and testable.

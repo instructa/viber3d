@@ -1,76 +1,44 @@
 ---
-description: "Three.js and ECS system logic rules"
-globs: src/systems/**/*.ts
+description: ECS System Rules
+globs: src/systems/*.ts
 alwaysApply: false
 ---
 
-## Core Principles
-- Pattern: `export const systemName = (world: World) => void`
-- Each system handles one aspect of game logic
-- Keep systems pure with no side effects
-- Use delta time for frame-independent movement
-- Query only relevant traits with `world.query()`
-```typescript
-world.query(Transform, Velocity).updateEach(([t, v]) => { t.position.add(v.vector); });
-```
+## System Requirements
 
-## Key Systems
+- Each system is a pure function that processes traits and updates ECS data.
+- Use `world.query(...)` to get relevant entities and keep queries minimal.
+- Include delta time when doing any time-based logic.
+- Avoid side effects beyond ECS data changes (no DOM or React state modifications).
 
-### Transform & Movement
-- Handle position/rotation updates with THREE.js math utilities
-- Apply forces and velocities consistently
-- Use delta for frame-independent movement: `position.x += velocity.x * delta;`
+## System Examples
 
-### Camera
-- Use smooth interpolation and constraints
-- Implement position damping: `position.lerp(target, damping)`
-- Use quaternion slerp for smooth rotation
-
-### Input
-- Separate polling (poll-input.ts) from application (apply-input.ts)
-- Reset accumulated values after use: `state.mouseDelta[X/Y] = 0;`
-- Handle pointer lock for mouse movement
-
-## Performance
-- Reuse vectors/matrices instead of creating new ones
-- Use spatial partitioning (SpatialHashMap) for efficient collision detection
-- Dispose unused THREE.js resources
-- Use BufferGeometry, InstancedMesh and object pooling
-
-## Anti-Patterns
-- ❌ Don't access DOM directly (use input system)
-- ❌ Don't modify React state from systems
-- ❌ Don't create new THREE.js objects each frame
-- ❌ Don't skip delta time in movement calculations
-- ❌ Don't mix visual and logic updates
-
-## Structure & Organization
-- Import Three.js via ES modules
-- Follow naming pattern: update-*, apply-*, handle-*
-- Document system execution order and dependencies
-- Keep each system's responsibility focused
-- All player controls in apply-input.ts, poll-input.ts
-- Avoid useFrame in components for input handling
-
-## System Patterns
-```typescript
-// Transform System
-export function moveEntities(world: World) {
-    const { delta } = world.get(Time)!;
-    world.query(Transform, Movement).updateEach(([t, m]) => {
-        t.position.x += m.velocity.x * delta;
-        t.position.y += m.velocity.y * delta;
-        t.position.z += m.velocity.z * delta;
-        m.velocity.multiplyScalar(m.damping);
-    });
-}
-
-// Input System
-export function pollInput(world: World) {
-    world.query(IsPlayer, Input).updateEach(([input]) => {
-        input.mouseDelta.set(state.mouseDeltaX, state.mouseDeltaY);
-        state.mouseDeltaX = 0;
-        state.mouseDeltaY = 0;
-    });
+```ts
+// Standard system pattern
+export function movementSystem(world: World) {
+  const time = world.get(Time)
+  if (!time) return
+  world.query(Transform, Velocity).updateEach(([t, v]) => {
+    t.position.addScaledVector(v.vector, time.delta)
+  })
 }
 ```
+
+## Advanced Usage
+
+- Partial Queries: Use `.select(...)` to fetch only the needed traits for performance.
+- Conditional Scheduling: Run certain systems only in specific game states (e.g. paused, menu, or combat).
+- Relationships: Use `relation()` if the system involves parent-child or entity-to-entity logic, rather than raw references.
+
+## Performance Tips
+
+- Reuse math objects like `Vector3` or `Matrix4` rather than creating new ones every frame.
+- Remove or recycle entities that are no longer needed (e.g. off-screen, zero-health).
+- Prefer SoA for large numeric arrays to improve cache performance.
+- Consider running heavy systems at reduced frequencies instead of every frame.
+
+## Do Not
+
+- Do not directly manipulate React components or the DOM from a system.
+- Do not skip delta time in time-based updates.
+- Do not implement camera or purely visual updates in systems; leave those to React or specialized visual hooks.

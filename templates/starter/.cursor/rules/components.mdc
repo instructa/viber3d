@@ -1,84 +1,47 @@
 ---
-description: Coding Standards for React Three Fiber Components
+description: React Three Fiber Component Rules
 globs: src/components/**/*.tsx
 alwaysApply: false
 ---
 
-## Core R3F Component Principles
+# R3F Component Guidelines
 
-- Use functional components with Hooks (no class components)
-- Clean up resources in useEffect return functions to prevent memory leaks
-- Define props with TypeScript interfaces
-- Keep components purely visual; game logic belongs in systems
+## Core Principles
 
-## Performance Guidelines
+- Use functional components for R3F with ECS data read via hooks.
+- Keep components strictly presentational. All game logic should reside in systems.
+- Use `useTraitEffect(entity, Trait, callback)` to reflect ECS changes on mesh references.
 
-- Avoid unmounting large scene nodes; toggle visibility instead
-- Use memoization only where needed (useMemo/useCallback)
-- Cache initialization values as constants
-- Avoid unnecessary trait updates
+## Example Structure
 
-## R3F Component Patterns
+```tsx
+function EnemyView({ entity }: { entity: Entity }) {
+  const ref = useRef<THREE.Mesh | null>(null)
 
-### Asset Loading
-- Use `useGLTF` for models, preload with `useGLTF.preload(src)`
-- Handle model cleanup in useEffect return function
-- Handle loading states appropriately
+  // React to trait changes only for visual updates
+  useTraitEffect(entity, Transform, (t) => {
+    if (ref.current && t) {
+      ref.current.position.copy(t.position)
+      ref.current.rotation.copy(t.rotation)
+    }
+  })
 
-### Entity & Scene Management
-- Use `<group>` for transform hierarchies
-- Type refs properly: `useRef<Group | null>(null) as MutableRefObject<Group | null>`
-- Initialize traits only when needed: `if (!entity.has(Transform))`
-- Keep initial states as constants
-
-### Component Structure
-```typescript
-function GameComponent({ entity }: { entity: Entity }) {
-    // 1. Refs & assets
-    const groupRef = useRef<Group | null>(null) as MutableRefObject<Group | null>;
-    const { scene } = useGLTF(MODEL_URL);
-    
-    // 2. Initialize with useCallback
-    const setInitial = useCallback((group: Group | null) => {
-        if (!group) return;
-        groupRef.current = group;
-        
-        // Only set traits if needed
-        if (!entity.has(Transform)) entity.set(Transform, INITIAL_STATE);
-        entity.add(Ref(scene));
-    }, [entity, scene]);
-    
-    // 3. React to state changes
-    useTraitEffect(entity, Transform, (transform) => {
-        if (!groupRef.current || !transform) return;
-        // Update visual representation only
-        groupRef.current.position.copy(transform.position);
-    });
-    
-    return <group ref={setInitial}><primitive object={scene} /></group>;
+  return (
+    <mesh ref={ref}>
+      <sphereGeometry args={[0.5, 16, 16]} />
+      <meshStandardMaterial color="red" />
+    </mesh>
+  )
 }
 ```
 
-### Resource Cleanup
-```typescript
-useEffect(() => {
-    return () => {
-        scene.traverse((obj) => {
-            if (obj instanceof THREE.Mesh) {
-                obj.geometry?.dispose();
-                obj.material instanceof Array 
-                    ? obj.material.forEach(m => m.dispose())
-                    : obj.material?.dispose();
-            }
-        });
-    };
-}, [scene]);
-```
+## Asset Loading and Cleanup
+
+- Use React Three Fiber helpers like `useGLTF` or `useTexture` for loading models or textures.
+- Dispose geometry and materials in a cleanup function if creating many dynamic objects over time.
 
 ## Anti-Patterns
-- ❌ Don't use useFrame for game logic, only for visual effects
-- ❌ Don't modify traits directly in components
-- ❌ Don't store game state in React state
-- ❌ Don't skip null checks on refs or traits
-- ❌ Don't handle player input in components (use systems)
-- ❌ Don't initialize traits without checking existence
+
+- Do not place ECS or game logic in React state.
+- Do not mutate ECS traits directly from a component. Use systems or actions.
+- Do not rely on `useFrame` for core game logic; reserve it for minor visual effects only.
