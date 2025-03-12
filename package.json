@@ -6,7 +6,7 @@
     "packages/*",
     "docs/*"
   ],
-  "version": "0.0.0",
+  "version": "0.0.4",
   "homepage": "https://codetie.ai",
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
@@ -26,6 +26,7 @@
     "release": "pnpm build:packages && pnpm --filter viber3d release",
     "release:alpha": "pnpm build:packages && pnpm --filter viber3d release:alpha",
     "release:edge": "pnpm build:packages && pnpm --filter viber3d release:edge",
+    "release:branch": "git checkout -b release/v$npm_package_version && git push origin release/v$npm_package_version && git tag v$npm_package_version && git push origin v$npm_package_version",
     "llms": "npx repomix docs/viber3d-docs/content --include '4.core-concepts/*.md,5.addons/*.md' --output docs/viber3d-docs/public/llms_full.txt"
   },
   "keywords": [
