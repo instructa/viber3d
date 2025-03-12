@@ -1,6 +1,7 @@
 ---
 description: "TypeScript best practices for trait modules"
 globs: src/traits/**/*.ts
+alwaysApply: false
 ---
 
 ## Trait Design Core Principles
@@ -9,6 +10,7 @@ globs: src/traits/**/*.ts
 - Follow TypeScript strict mode, avoid `any` types
 - Define clear interfaces for trait structures
 - Document trait purpose with JSDoc comments
+- Never use `defineTrait` or any other imaginary import. 
 
 ## Koota Implementation
 - Use pattern: `export const TraitName = trait({ ... })`
