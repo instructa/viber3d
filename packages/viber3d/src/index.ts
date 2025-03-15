@@ -27,6 +27,9 @@ const renameFiles: Record<string, string | undefined> = {
 const packageManagerOptions = ['npm', 'yarn', 'pnpm'] as const
 type PackageManagerName = typeof packageManagerOptions[number]
 
+// Default template registry
+const DEFAULT_TEMPLATE = 'gh:instructa/viber3d/templates/starter'
+
 const initCommand = defineCommand({
   meta: {
     name: 'init',
@@ -47,6 +50,11 @@ const initCommand = defineCommand({
     name: {
       type: 'string',
       description: 'Project name',
+    },
+    template: {
+      type: 'string',
+      description: 'Template name or GitHub repository',
+      alias: 't',
     },
     force: {
       type: 'boolean',
@@ -163,10 +171,26 @@ const initCommand = defineCommand({
         shouldForce = true
       }
 
+      // Determine which template to use
+      let templateSource = DEFAULT_TEMPLATE
+      
+      if (ctx.args.template) {
+        if (ctx.args.template === 'next') {
+          // Special case for the 'next' template
+          templateSource = 'gh:instructa/viber3d/templates/starter#next'
+        } else if (ctx.args.template.includes('/')) {
+          // Assume it's a GitHub repository path
+          templateSource = `gh:${ctx.args.template}`
+        } else {
+          // Assume it's a template name in the instructa/viber3d repo
+          templateSource = `gh:instructa/viber3d/templates/${ctx.args.template}`
+        }
+      }
+
       // Download template using giget
-      consola.info('Downloading Viber3D template...')
+      consola.info(`Downloading template from ${colors.cyan(templateSource)}...`)
       try {
-        await downloadTemplate('gh:instructa/viber3d/templates/starter', {
+        await downloadTemplate(templateSource, {
           dir: root,
           force: shouldForce
         })
