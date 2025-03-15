@@ -1,7 +1,8 @@
 {
-	"name": "@viber3d/starter-template",
+	"name": "viber3d-starter",
 	"version": "0.0.0",
-	"description": "A modern Game Starter Kit for 3D games with react",
+	"private": true,
+	"description": "Starter template for Viber3D projects",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",

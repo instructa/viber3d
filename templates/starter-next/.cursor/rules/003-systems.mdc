@@ -1,0 +1,44 @@
+---
+description: ECS System Rules
+globs: src/systems/*.ts
+alwaysApply: false
+---
+
+## System Requirements
+
+- Each system is a pure function that processes traits and updates ECS data.
+- Use `world.query(...)` to get relevant entities and keep queries minimal.
+- Include delta time when doing any time-based logic.
+- Avoid side effects beyond ECS data changes (no DOM or React state modifications).
+
+## System Examples
+
+```ts
+// Standard system pattern
+export function movementSystem(world: World) {
+  const time = world.get(Time)
+  if (!time) return
+  world.query(Transform, Velocity).updateEach(([t, v]) => {
+    t.position.addScaledVector(v.vector, time.delta)
+  })
+}
+```
+
+## Advanced Usage
+
+- Partial Queries: Use `.select(...)` to fetch only the needed traits for performance.
+- Conditional Scheduling: Run certain systems only in specific game states (e.g. paused, menu, or combat).
+- Relationships: Use `relation()` if the system involves parent-child or entity-to-entity logic, rather than raw references.
+
+## Performance Tips
+
+- Reuse math objects like `Vector3` or `Matrix4` rather than creating new ones every frame.
+- Remove or recycle entities that are no longer needed (e.g. off-screen, zero-health).
+- Prefer SoA for large numeric arrays to improve cache performance.
+- Consider running heavy systems at reduced frequencies instead of every frame.
+
+## Do Not
+
+- Do not directly manipulate React components or the DOM from a system.
+- Do not skip delta time in time-based updates.
+- Do not implement camera or purely visual updates in systems; leave those to React or specialized visual hooks.

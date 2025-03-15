@@ -1,0 +1,31 @@
+---
+description: Utility Function Patterns
+globs: src/utils/**/*.ts
+alwaysApply: false
+---
+
+## Koota Integration
+
+- Access entity traits with `entity.get(Trait)`.
+- Handle missing traits gracefully, using null checks when necessary.
+
+## Three.js Usage
+
+- Reuse math objects like `Vector3` to reduce garbage collection.
+- Leverage built-in Three.js methods for transformations instead of reinventing them.
+
+## Performance
+
+- Reuse arrays or buffers for spatial and geometry operations.
+- Implement spatial partitioning (quadtrees, hash grids) for large worlds.
+- Provide reset methods to avoid creating new data structures every frame.
+
+## Math Utilities
+
+- Consolidate common math operations in concise functions.
+- Ensure edge cases are handled (e.g. clamping, bounding conditions).
+
+## Documentation
+
+- Add clear comments and note any adapted third-party code.
+- Highlight performance considerations for complex or frequently used utilities.

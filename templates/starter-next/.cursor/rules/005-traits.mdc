@@ -1,0 +1,61 @@
+---
+description: Trait Module Rules
+globs: src/traits/**/*.ts
+alwaysApply: false
+---
+
+# Trait Definitions
+
+## Core Practices
+
+- Keep trait data minimal. Place logic in systems.
+- Use schema-based (SoA) traits for numeric or frequently-updated data.
+- Use callback-based (AoS) traits for complex or class objects (e.g. THREE.Mesh).
+- Use tag traits (with no fields) as flags to identify entities (like `IsPlayer`).
+
+## Examples
+
+```ts
+import { trait } from 'koota'
+import * as THREE from 'three'
+
+// Schema-based (SoA)
+export const Health = trait({ amount: 100, max: 100 })
+
+// Callback-based (AoS)
+export const Transform = trait(() => ({
+  position: new THREE.Vector3(),
+  rotation: new THREE.Euler()
+}))
+
+// Tag trait
+export const IsEnemy = trait()
+```
+
+## Relationships
+
+- Use `relation()` when entities need references to each other.
+- Pass additional fields if you need extra data in the relationship.
+- Use `exclusive: true` or `autoRemoveTarget: true` if needed for parenting or single-target constraints.
+
+```ts
+import { relation } from 'koota'
+
+// Simple relation with no fields
+export const ChildOf = relation()
+
+// Relationship with data
+export const Contains = relation({ store: { amount: 0 } })
+```
+
+## Best Practices
+
+- Store only essential data in traits. Do not add large logic blocks.
+- Check for existence before adding a trait: `if (!entity.has(Health)) entity.add(Health())`.
+- Prefer `entity.set(Trait, (prev) => ({ ...prev, ...changes }))` for updates so Koota can handle events.
+
+## Anti-Patterns
+
+- Do not share the same mutable object across multiple entities (like a single shared Vector3).
+- Do not store React refs, DOM elements, or large external objects in traits.
+- Do not combine unrelated data in one trait. Keep them cohesive and small.

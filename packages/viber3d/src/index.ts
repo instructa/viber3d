@@ -177,13 +177,30 @@ const initCommand = defineCommand({
       if (ctx.args.template) {
         if (ctx.args.template === 'next') {
           // Special case for the 'next' template
-          templateSource = 'gh:instructa/viber3d/templates/starter#next'
+          templateSource = 'gh:instructa/viber3d/templates/starter-next#next'
         } else if (ctx.args.template.includes('/')) {
           // Assume it's a GitHub repository path
           templateSource = `gh:${ctx.args.template}`
         } else {
           // Assume it's a template name in the instructa/viber3d repo
           templateSource = `gh:instructa/viber3d/templates/${ctx.args.template}`
+        }
+      } else if (!ctx.args.defaults && !ctx.args.yes) {
+        // Prompt for template selection if no template is specified
+        const templateChoice = await consola.prompt('Which template would you like to use?', {
+          type: 'select',
+          options: [
+            { label: 'starter (recommended, stable)', value: 'starter' },
+            { label: 'next (experimental)', value: 'next' }
+          ],
+          default: 'starter'
+        })
+        
+        if (templateChoice === 'next') {
+          templateSource = 'gh:instructa/viber3d/templates/starter-next#next'
+          consola.info(`Selected the experimental 'next' template.`)
+        } else {
+          consola.info(`Selected the recommended 'starter' template.`)
         }
       }
 
