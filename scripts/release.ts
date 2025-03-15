@@ -55,56 +55,41 @@ function bumpVersion(pkgPath: string, type: 'major' | 'minor' | 'patch' | string
   const currentVersion = pkgJson.version;
   let newVersion: string;
 
-  // Handle alpha versioning
+  // Parse current version to check if it's already an alpha version
+  const versionRegex = /^(\d+\.\d+\.\d+)(?:-alpha\.(\d+))?$/;
+  const match = currentVersion.match(versionRegex);
+  
+  if (!match) {
+    throw new Error(`Invalid version format: ${currentVersion}`);
+  }
+
+  let baseVersion = match[1];
+  const currentAlphaVersion = match[2] ? parseInt(match[2], 10) : -1;
+
+  // Handle version bumping
+  if (type === 'major' || type === 'minor' || type === 'patch') {
+    const [major, minor, patch] = baseVersion.split('.').map(Number);
+    
+    // Bump version according to type
+    if (type === 'major') {
+      baseVersion = `${major + 1}.0.0`;
+    } else if (type === 'minor') {
+      baseVersion = `${major}.${minor + 1}.0`;
+    } else { // patch
+      baseVersion = `${major}.${minor}.${patch + 1}`;
+    }
+  } else if (type.match(/^\d+\.\d+\.\d+$/)) {
+    // Use the provided version string directly as base version
+    baseVersion = type;
+  }
+
+  // Create final version string
   if (isAlpha) {
-    // Parse current version to check if it's already an alpha version
-    const versionRegex = /^(\d+\.\d+\.\d+)(?:-alpha\.(\d+))?$/;
-    const match = currentVersion.match(versionRegex);
-    
-    if (!match) {
-      throw new Error(`Invalid version format for alpha: ${currentVersion}`);
-    }
-    
-    let baseVersion = match[1];
-    
-    // If we're bumping the version type, we need to calculate a new base version first
-    if (type !== 'alpha') {
-      const [major, minor, patch] = baseVersion.split('.').map(Number);
-      
-      if (type === 'major') {
-        baseVersion = `${major + 1}.0.0`;
-      } else if (type === 'minor') {
-        baseVersion = `${major}.${minor + 1}.0`;
-      } else if (type === 'patch') {
-        baseVersion = `${major}.${minor}.${patch + 1}`;
-      } else if (type.match(/^\d+\.\d+\.\d+$/)) {
-        // If a specific version is provided, use it as the base
-        baseVersion = type;
-      }
-    }
-    
-    // Get the current alpha version or start at 0
-    const alphaVersion = match[2] ? parseInt(match[2], 10) : -1;
-    newVersion = `${baseVersion}-alpha.${alphaVersion + 1}`;
+    // For alpha releases, always start at alpha.0 when base version changes
+    const alphaVersion = baseVersion === match[1] ? currentAlphaVersion + 1 : 0;
+    newVersion = `${baseVersion}-alpha.${alphaVersion}`;
   } else {
-    // Regular version bumping (non-alpha)
-    if (type === 'major' || type === 'minor' || type === 'patch') {
-      // Parse current version, removing any alpha suffix
-      const baseVersion = currentVersion.split('-')[0];
-      const [major, minor, patch] = baseVersion.split('.').map(Number);
-      
-      // Bump version according to type
-      if (type === 'major') {
-        newVersion = `${major + 1}.0.0`;
-      } else if (type === 'minor') {
-        newVersion = `${major}.${minor + 1}.0`;
-      } else { // patch
-        newVersion = `${major}.${minor}.${patch + 1}`;
-      }
-    } else {
-      // Use the provided version string directly
-      newVersion = type;
-    }
+    newVersion = baseVersion;
   }
 
   // Update package.json

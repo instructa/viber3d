@@ -28,6 +28,9 @@
     "release:patch": "tsx scripts/release.ts patch",
     "release:minor": "tsx scripts/release.ts minor",
     "release:major": "tsx scripts/release.ts major",
+    "release:patch:alpha": "tsx scripts/release.ts patch --alpha",
+    "release:minor:alpha": "tsx scripts/release.ts minor --alpha",
+    "release:major:alpha": "tsx scripts/release.ts major --alpha",
     "release:branch": "git checkout -b release/v$npm_package_version && git push origin release/v$npm_package_version && git tag v$npm_package_version && git push origin v$npm_package_version",
     "llms": "npx repomix docs/viber3d-docs/content --include '4.core-concepts/*.md,5.addons/*.md' --output docs/viber3d-docs/public/llms_full.txt"
   },
