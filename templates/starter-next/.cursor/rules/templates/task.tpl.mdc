@@ -1,6 +1,6 @@
 ---
 description: use this ALWAYS to create/update a task in json
-globs: docs/tasklist.json
+globs: .planr/roadmap.json
 alwaysApply: false
 ---
 
