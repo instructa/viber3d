@@ -1,0 +1,10 @@
+{
+	"lastEdited": "2025-03-15T12:00:00Z",
+	"plan": {
+		"currentStoryId": "1.1",
+		"nextAvailableStoryId": "1.2"
+	},
+	"build": {
+		"currentStoryId": "1.1"
+	}
+}
