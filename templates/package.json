@@ -1,0 +1,20 @@
+{
+  "name": "viber3d-templates",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Templates for Viber3D projects",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instructa/viber3d"
+  },
+  "keywords": [
+    "viber3d",
+    "templates",
+    "three",
+    "threejs",
+    "instructa"
+  ],
+  "author": "Kevin Kern",
+  "license": "MIT"
+}
