@@ -112,3 +112,5 @@ codefetch
 # temp
 __old__
 __scripts__
+
+.repomix-output.txt
