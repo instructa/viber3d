@@ -29,7 +29,7 @@
 	"author": "Kevin Kern",
 	"license": "MIT",
 	"dependencies": {
-		"koota": "^0.1.12",
+		"koota": "^0.2.3",
 		"@react-three/drei": "^9.120.8",
 		"@react-three/fiber": "^8.17.12",
 		"@react-three/rapier": "^1.5.0",

@@ -103,8 +103,6 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(typescript@5.8.2)(vue-tsc@2.2.8(typescript@5.8.2))
 
-  packages/viber3d-starter: {}
-
   templates/starter:
     dependencies:
       '@react-three/drei':
@@ -125,6 +123,88 @@ importers:
       koota:
         specifier: ^0.1.12
         version: 0.1.12(@react-three/fiber@8.18.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0)
+      leva:
+        specifier: ^0.10.0
+        version: 0.10.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-animated-counter:
+        specifier: ^1.7.9
+        version: 1.7.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      tailwindcss:
+        specifier: ^4.0.9
+        version: 4.0.12
+      three:
+        specifier: ^0.173.0
+        version: 0.173.0
+      typescript-eslint:
+        specifier: ^8.25.0
+        version: 8.26.1(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.21.0
+        version: 9.22.0
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.18
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.5(@types/react@18.3.18)
+      '@types/three':
+        specifier: ^0.173.0
+        version: 0.173.0
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.3.4(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      '@vitejs/plugin-react-swc':
+        specifier: ^3.7.2
+        version: 3.8.0(@swc/helpers@0.5.15)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      eslint:
+        specifier: ^9.21.0
+        version: 9.22.0(jiti@2.4.2)
+      eslint-plugin-react:
+        specifier: ^7.37.4
+        version: 7.37.4(eslint@9.22.0(jiti@2.4.2))
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.2.0(eslint@9.22.0(jiti@2.4.2))
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.18
+        version: 0.4.19(eslint@9.22.0(jiti@2.4.2))
+      globals:
+        specifier: ^16.0.0
+        version: 16.0.0
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.2
+      vite:
+        specifier: ^6.2.0
+        version: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0)
+
+  templates/starter-next:
+    dependencies:
+      '@react-three/drei':
+        specifier: ^9.120.8
+        version: 9.122.0(@react-three/fiber@8.18.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0))(@types/react@18.3.18)(@types/three@0.173.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0)(use-sync-external-store@1.4.0(react@18.3.1))
+      '@react-three/fiber':
+        specifier: ^8.17.12
+        version: 8.18.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0)
+      '@react-three/postprocessing':
+        specifier: ^2.16.6
+        version: 2.19.1(@react-three/fiber@8.18.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0))(@types/three@0.173.0)(react@18.3.1)(three@0.173.0)
+      '@react-three/rapier':
+        specifier: ^1.5.0
+        version: 1.5.0(@react-three/fiber@8.18.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0))(react@18.3.1)(three@0.173.0)
+      '@tailwindcss/vite':
+        specifier: ^4.0.9
+        version: 4.0.12(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))
+      koota:
+        specifier: ^0.2.3
+        version: 0.2.3(@types/react@18.3.18)(react@18.3.1)
       leva:
         specifier: ^0.10.0
         version: 0.10.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4376,6 +4456,17 @@ packages:
       react-dom:
         optional: true
       three:
+        optional: true
+
+  koota@0.2.3:
+    resolution: {integrity: sha512-s1g2x5T8wmmnBLsVbgLtpKptwcrIxAPJONS3V5zUUAG+MEQYP9DaR/h8PXF3h4aQTOBE2TeTODoLCqYX3M2nJA==}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      react: '>=18.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
         optional: true
 
   launch-editor@2.10.0:
@@ -11898,6 +11989,11 @@ snapshots:
       '@react-three/fiber': 8.18.0(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.173.0)
       react-dom: 18.3.1(react@18.3.1)
       three: 0.173.0
+
+  koota@0.2.3(@types/react@18.3.18)(react@18.3.1):
+    optionalDependencies:
+      '@types/react': 18.3.18
+      react: 18.3.1
 
   launch-editor@2.10.0:
     dependencies:
