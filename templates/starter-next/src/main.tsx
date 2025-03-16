@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles.css';
-import { Game } from './Game';
+import { App } from './app';
 import { WorldProvider } from 'koota/react';
 import { world } from './world';
 
@@ -10,7 +10,7 @@ import { world } from './world';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <WorldProvider world={world}>
-      <Game />
+      <App />
     </WorldProvider>
   </React.StrictMode>
 );

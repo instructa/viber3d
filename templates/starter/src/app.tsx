@@ -5,7 +5,7 @@ import { GameLoop } from './gameloop';
 import { Startup } from './startup';
 import { Color } from 'three';
 
-export function Game() {
+export function App() {
 	return (
 		<>
 			<Canvas style={{ background: 'white' }} shadows={false} gl={{ alpha: false }}>
