@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import { CameraRenderer } from './components/camera-renderer';
 import { PlayerRenderer } from './components/player-renderer';
-import { GameLoop } from './gameloop';
+import { GameLoop } from './frameloop';
 import { Startup } from './startup';
 import { Color } from 'three';
 

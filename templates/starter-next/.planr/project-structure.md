@@ -48,7 +48,7 @@ graph TB
     end
 
     subgraph "Game Loop"
-        E[gameloop.ts] --> F[System Updates]
+        E[frameloop.ts] --> F[System Updates]
         F --> G[Physics System]
         F --> H[Combat System]
         F --> I[AI System]
