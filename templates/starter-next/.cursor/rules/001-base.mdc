@@ -78,6 +78,3 @@ viber3d/
 3. Document trait dependencies (which traits need each other)
 4. Create a spawn function that bundles ALL required traits together
 5. Only then implement the systems that operate on these traits
-
-
-
