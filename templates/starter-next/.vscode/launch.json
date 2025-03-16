@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Development Server",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "Start Development Server",
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 1
+      },
+      "internalConsoleOptions": "neverOpen",
+      "serverReadyAction": {
+        "pattern": "Local:\\s+(https?://\\S+|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+:[0-9]+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      },
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--version"],
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Stop Development Server",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "Stop Development Server",
+      "presentation": {
+        "hidden": false,
+        "group": "",
+        "order": 2
+      },
+      "internalConsoleOptions": "neverOpen",
+      "serverReadyAction": null,
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--version"],
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

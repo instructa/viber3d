@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Development Server",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*$",
+          "endsPattern": "^.*Local:.+(https?://\\S+|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+:[0-9]+).*$"
+        }
+      },
+      "detail": "Start viber3d"
+    },
+    {
+      "label": "Stop Development Server",
+      "type": "shell",
+      "command": "echo 'Stopping development server...' && kill $(lsof -t -i:5174) 2>/dev/null || true",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "detail": "Force stop the running development server without confirmation"
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "${command:npm-script.showScriptExplorer}",
+      "script": "clean",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": [],
+      "detail": "Clean node_modules and reinstall dependencies"
+    }
+  ]
+}
