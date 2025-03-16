@@ -34,7 +34,7 @@
     {
       "label": "Stop Development Server",
       "type": "shell",
-      "command": "echo 'Stopping development server...' && kill $(lsof -t -i:5174) 2>/dev/null || true",
+      "command": "echo 'Stopping development server...' && kill $(lsof -t -i:5173) 2>/dev/null || true",
       "presentation": {
         "reveal": "always",
         "panel": "new",
